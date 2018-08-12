@@ -1,5 +1,23 @@
 {% extends "base.html.twig" %}
 {% block body %}
 <h1>{{ experiment.name }}</h1>
+{% for outcome in experiment.expectedOutcomes %}
+<ul>
+    <li>{{ outcome.name }} -  <em>{{ outcome.currentValue }}</em> -> <em>{{ outcome.expectedValue }}</em></li>
+</ul>
+{% endfor %}
+<hr/>
+<form method="post" action="{{ path('experiment_add_outcome', {'id': experiment.uuid}) }}">
+    <label for="outcome-name">New expected outcome</label>
+    <input type="text" id="outcome-name" name="name" placeholder="Conversion rate" />
 
+    <label for="current-value">Current value</label>
+    <input type="text" id="current-value" name="currentValue" />
+
+    <label for="current-value">Expected value</label>
+    <input type="text" id="expected-value" name="expectedValue" />
+
+    <button type="submit">Add outcome</button>
+</form>
+<hr/>
 {% endblock %}

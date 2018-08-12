@@ -24,4 +24,11 @@ class Experiment
      * @var string
      */
     public $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ExpectedOutcome", mappedBy="experiment")
+     *
+     * @var ExpectedOutcome[]
+     */
+    public $expectedOutcomes;
 }
