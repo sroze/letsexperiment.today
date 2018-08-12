@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\CheckedOutcome;
 use App\Entity\CheckIn;
+use App\Entity\Collaborator;
 use App\Entity\ExpectedOutcome;
 use App\Entity\Experiment;
 use App\Entity\ExperimentPeriod;
@@ -104,6 +105,35 @@ class ExperimentController extends Controller
         return [
             'experiment' => $experiment,
         ];
+    }
+
+    /**
+     * @Route("/collaborators/add", name="experiment_add_collaborator")
+     */
+    public function addCollaborator(Experiment $experiment, Request $request, EntityManagerInterface $entityManager)
+    {
+        $email = $request->request->get('email');
+        if (empty($email)) {
+            throw new BadRequestHttpException('Collaborator\'s email is not valid');
+        }
+
+        $collaborator = $entityManager->getRepository(Collaborator::class)->findOneBy([
+            'email' => $email,
+        ]);
+
+        if (null === $collaborator) {
+            $collaborator = new Collaborator();
+            $collaborator->email = $email;
+
+            $entityManager->persist($collaborator);
+        }
+
+        $experiment->collaborators[] = $collaborator;
+
+        $entityManager->persist($experiment);
+        $entityManager->flush();
+
+        return $this->redirectToExperiment($experiment);
     }
 
     private function redirectToExperiment(Experiment $experiment): RedirectResponse

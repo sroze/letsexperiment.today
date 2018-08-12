@@ -28,6 +28,14 @@ class CheckIn
     public $experiment;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Collaborator", inversedBy="checkIns")
+     * @ORM\JoinColumn(name="collaborator_uuid", referencedColumnName="uuid")
+     *
+     * @var Experiment
+     */
+    public $collaborator;
+
+    /**
      * @ORM\Column(type="datetime")
      *
      * @var \DateTime

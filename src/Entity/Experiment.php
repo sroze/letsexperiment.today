@@ -27,6 +27,18 @@ class Experiment
     public $name;
 
     /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Collaborator", inversedBy="experiments")
+     * @ORM\JoinTable(
+     *     name="experiments_collaborators",
+     *     joinColumns={@ORM\JoinColumn(name="experiment_uuid", referencedColumnName="uuid")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="collaborator_uuid", referencedColumnName="uuid")}
+     * )
+     *
+     * @var Collaborator[]
+     */
+    public $collaborators;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\ExpectedOutcome", mappedBy="experiment")
      *
      * @var ExpectedOutcome[]

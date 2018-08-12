@@ -60,4 +60,17 @@
         </form>
     {% endif %}
 {% endif %}
+<hr>
+<h4>Collaborators</h4>
+<ul>
+    {% for collaborator in experiment.collaborators %}
+    <li>{{ collaborator.email }}</li>
+    {% endfor %}
+    <li>
+        <form method="post" action="{{ path('experiment_add_collaborator', {'id': experiment.uuid}) }}">
+            <input type="text" name="email" />
+            <button type="submit">Add</button>
+        </form>
+    </li>
+</ul>
 {% endblock %}
