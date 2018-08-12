@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+{% block body %}
+<h1>Check-In for "{{ experiment.name }}"</h1>
+<form method="post">
+    <table>
+        <thead>
+        <tr>
+            <th>Expected outcome</th>
+            <th>Current value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for expectedOutcome in experiment.expectedOutcomes %}
+            <tr>
+                <td>{{ expectedOutcome.name }}</td>
+                <td><input title="Current value" type="text" name="outcome[{{ expectedOutcome.uuid }}]" /></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td></td>
+            <td>
+                <button type="submit">Check in</button>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</form>
+{% endblock %}

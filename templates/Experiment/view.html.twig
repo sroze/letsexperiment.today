@@ -7,17 +7,57 @@
 </ul>
 {% endfor %}
 <hr/>
-<form method="post" action="{{ path('experiment_add_outcome', {'id': experiment.uuid}) }}">
-    <label for="outcome-name">New expected outcome</label>
-    <input type="text" id="outcome-name" name="name" placeholder="Conversion rate" />
+{% if experiment.isStarted() %}
+    <h3>It's on-going!</h3>
+    <em>From:</em> {{ experiment.period.start | date }}
+        <br>
+    <em>To:</em> {{ experiment.period.end | date }}
+    <hr>
+    <a href="{{ path('experiment_check_in', {'id': experiment.uuid}) }}">Do a check-in</a>
+    <hr>
+    <h3>Last check-ins</h3>
+    <ul>
+        {% for checkIn in experiment.checkIns %}
+        <li>
+            <strong>{{ checkIn.date | date }}</strong>
 
-    <label for="current-value">Current value</label>
-    <input type="text" id="current-value" name="currentValue" />
+            <ul>
+                {% for checkedOutcome in checkIn.checkedOutcomes %}
+                <li>{{ checkedOutcome.expectedOutcome.name }} -> <em>{{ checkedOutcome.currentValue }}</em></li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <form method="post" action="{{ path('experiment_add_outcome', {'id': experiment.uuid}) }}">
+        <label for="outcome-name">New expected outcome</label>
+        <input type="text" id="outcome-name" name="name" placeholder="Conversion rate" />
 
-    <label for="current-value">Expected value</label>
-    <input type="text" id="expected-value" name="expectedValue" />
+        <label for="current-value">Current value</label>
+        <input type="text" id="current-value" name="currentValue" />
 
-    <button type="submit">Add outcome</button>
-</form>
-<hr/>
+        <label for="current-value">Expected value</label>
+        <input type="text" id="expected-value" name="expectedValue" />
+
+        <button type="submit">Add outcome</button>
+    </form>
+    <hr/>
+
+    {% if experiment.expectedOutcomes | length > 0 %}
+        <form method="post" action="{{ path('experiment_start', {'id': experiment.uuid}) }}">
+            <label for="duration">Duration</label>
+            <select id="duration" name="duration">
+                <option value="+3 months">3 months</option>
+                <option value="+1 month">1 month</option>
+                <option value="+2 weeks" selected>2 weeks</option>
+                <option value="+1 week">1 week</option>
+                <option value="+3 days">3 days</option>
+                <option value="+1 day">1 day</option>
+            </select>
+
+            <button type="submit">Start</button>
+        </form>
+    {% endif %}
+{% endif %}
 {% endblock %}
