@@ -1,0 +1,10 @@
+{% extends "base.html.twig" %}
+{% block body %}
+<h1>Let's experiment today!</h1>
+<p>Design, measure and track your experiments.</p>
+
+<form method="post" action="{{ path('create_experiment') }}">
+    <input type="text" name="name" placeholder="Type your experiment...">
+    <button>Get started</button>
+</form>
+{% endblock %}
