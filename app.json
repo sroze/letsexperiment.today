@@ -26,9 +26,6 @@
     "MAILER_URL": {
       "required": true
     },
-    "DATABASE_URL": {
-      "required": true
-    },
     "APP_ENV": {
       "required": true
     },
