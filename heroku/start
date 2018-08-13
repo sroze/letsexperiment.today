@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Set the "APP_BUILD" from the "HEROKU_SLUG_COMMIT" variable
+if [ -n "$HEROKU_SLUG_COMMIT" ]; then
+    APP_BUILD=${HEROKU_SLUG_COMMIT:-$APP_BUILD}
+fi
+export APP_BUILD=${APP_BUILD:-unknown}
+
+# Start Heroku's PHP + nginx buildpack
+exec ./vendor/bin/heroku-php-nginx -C ./heroku/configuration/nginx.conf public/

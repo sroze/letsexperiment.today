@@ -1,0 +1,45 @@
+{
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-php.git#v131"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs.git#v118"
+    }
+  ],
+  "addons": [
+    {
+      "plan": "heroku-postgresql"
+    }
+  ],
+  "env": {
+    "JWT_PASSPHRASE": {
+      "required": true,
+      "description": "JWT passphrase"
+    },
+    "JWT_PUBLIC_KEY": {
+      "required": true
+    },
+    "JWT_SECRET_KEY": {
+      "required": true
+    },
+    "MAILER_URL": {
+      "required": true
+    },
+    "DATABASE_URL": {
+      "required": true
+    },
+    "APP_ENV": {
+      "required": true
+    },
+    "APP_SECRET": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "hobby"
+    }
+  }
+}
