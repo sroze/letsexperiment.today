@@ -1,15 +1,20 @@
-{% extends "base.html.twig" %}
-{% block body %}
-{% if error is not empty %}
-    <p>{{ error }}</p>
-{% endif %}
+{% extends "Security/layout/card.html.twig" %}
+{% block card_contents %}
+<h5 class="card-title">What is your email address?</h5>
+<p class="card-text">You will receive a dynamic link to log yourself in.</p>
+
 <form action="{{ path('login') }}" method="post">
-    <label for="email">Your email address</label>
-    <input name="email" id="email" type="text" required />
+    {% if error is defined and error is not empty %}
+        <p>{{ error }}</p>
+    {% endif %}
 
-    <input type="hidden" name="redirect_url" value="{{ redirect_url }}" />
-    <input type="hidden" name="current_route" value="{{ current_route }}" />
+    <div class="form-group">
+        <label for="email">Your email address</label>
+        <input name="email" id="email" type="text" class="form-control" required />
+    </div>
+    {% if redirect_url is defined %}<input type="hidden" name="redirect_url" value="{{ redirect_url }}" />{% endif %}
+    {% if current_route is defined %}<input type="hidden" name="current_route" value="{{ current_route }}" />{% endif %}
 
-    <button type="submit">Receive link</button>
+    <button type="submit" class="btn btn-primary">Receive link</button>
 </form>
 {% endblock %}

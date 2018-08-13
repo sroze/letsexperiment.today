@@ -1,0 +1,18 @@
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><i class="fa fa-users"></i> Collaborators</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for collaborator in experiment.collaborators %}
+            <li class="list-group-item">
+                <span>{{ collaborator.email }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="card-footer">
+        <form method="post" action="{{ path('experiment_add_collaborator', {'id': experiment.uuid}) }}" class="form-row">
+            <input type="email" name="email" class="form-control" style="flex: 1; width: initial;" placeholder="Email address" required />
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+</div>

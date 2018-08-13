@@ -1,21 +1,66 @@
 {% extends "base.html.twig" %}
-{% block body %}
-<h1>Let's experiment today!</h1>
-<p>Design, measure and track your experiments.</p>
+{% block contents %}
+<article class="home-hero row">
+    <div class="promo col-md-6">
+        <h2>Design, measure and track your experiments.</h2>
+        <p>Building a product or trying to achieve a personal goal, we experiment every single day. Let's track these!</p>
+    </div>
 
-<form method="post" action="{{ path('create_experiment') }}">
-    <input type="text" name="name" placeholder="Type your experiment...">
-    <button>Get started</button>
-</form>
-<hr>
+    <div class="create col-md-6">
+        <form method="post" action="{{ path('create_experiment') }}">
+            <div class="form-group">
+                <label for="newExperiment">What's your experiment?</label>
+                <input type="text" name="name" class="form-control" id="newExperiment" placeholder="Use a tool to track my experiments...">
+            </div>
+            <button class="btn">Get started</button>
+        </form>
+    </div>
+</article>
+<article>
 {% if experiments | length > 0 %}
-<h2>Your experiments</h2>
-<ul>
+<h3>Your experiments</h3>
+<div class="experiments d-flex flex-wrap">
 {% for experiment in experiments %}
-    <li><a href="{{ path('experiment', {'id': experiment.uuid}) }}">{{ experiment.name }}</a></li>
+    <div class="card experiment-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ experiment.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+                {% if experiment.isStarted() %}
+                    On-going.
+                {% else %}
+                    Not started.
+                {% endif %}
+            </h6>
+        </div>
+        <ul class="list-group list-group-flush experiment-outcomes">
+            {% for expectedOutcome in experiment.expectedOutcomes %}
+            <li class="list-group-item">
+                <span class="experiment-name">{{ expectedOutcome.name }}</span>
+                <span class="experiment-transition">{{ expectedOutcome.currentValue }} ➟ {{ expectedOutcome.expectedValue }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="card-footer">
+            <a href="{{ path('experiment', {'id': experiment.uuid}) }}" class="card-link">Open experiment</a>
+        </div>
+    </div>
 {% endfor %}
-</ul>
-{% else %}
-    The marketing things... :)
+</div>
+<hr/>
 {% endif %}
+    <div class="row">
+        <div class="col-md-4">
+            <h4><i class="fa fa-key"></i> Measurable results</h4>
+            <p>When creating an experiment, you set a number of measurable <em>expected</em> outcomes. These will help you to conclude whether the experiment is successful or not.</p>
+        </div>
+        <div class="col-md-4">
+            <h4><i class="far fa-clock"></i> Track them over-time</h4>
+            <p>Every week, we will send you an overview of your on-going experiments and invite you to <em>check-in</em> to update the measurable expected outcomes.</p>
+        </div>
+        <div class="col-md-4">
+            <h4><i class="fa fa-users"></i> Collaborate</h4>
+            <p>Invite as many collaborators as you'd like to collaborate on your experiments. They will also be notified when something happens to the experimentation.</p>
+        </div>
+    </div>
+</article>
 {% endblock %}

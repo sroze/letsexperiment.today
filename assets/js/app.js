@@ -6,9 +6,21 @@
  */
 
 // any CSS you require will output into a single css file (app.css in this case)
-require('../css/app.css');
+require('bootstrap/dist/css/bootstrap.css');
+require('../css/app.scss');
+const $ = require('jquery');
 
-// Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-// var $ = require('jquery');
+$(function() {
+  $('form[name="new-outcome"]').each(function(index, form) {
+    const formFields = $('.form-fields', form);
+    formFields.css('display', 'none');
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+    $('button[type=submit]', form).click(function() {
+      if (formFields.css('display') === 'none') {
+        formFields.css('display', '');
+
+        return false;
+      }
+    })
+  });
+});

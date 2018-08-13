@@ -1,6 +1,5 @@
-{% extends "base.html.twig" %}
-{% block body %}
-    We've sent an email. Click on it!
-
-    NB: It contains <a href="{{ link }}">this link</a>.
+{% extends "Security/layout/card.html.twig" %}
+{% block card_contents %}
+<h5 class="card-title">We've sent you an email!</h5>
+<p class="card-text">Simply click on it and you should be logged-in. It will even resume where you were :)</p>
 {% endblock %}

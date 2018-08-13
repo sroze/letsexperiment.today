@@ -2,11 +2,32 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Let's Experiment!{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+        {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+        {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    <body{% block body_attrs %}{% endblock %}>
+        {% block body %}
+        <div class="container letsexperiment-container">
+            <nav class="navbar navbar-light bg-light">
+                <a class="navbar-brand" href="{{ path('home') }}">Let's Experiment!</a>
+
+                <span class="navbar-text">
+                    {% if is_granted('ROLE_USER') %}
+                        <a href="{{ path('logout') }}">Logout</a>
+                    {% else %}
+                        <a href="{{ path('login') }}">Login</a>
+                    {% endif %}
+                </span>
+            </nav>
+            {% block contents %}{% endblock %}
+        </div>
+        {% endblock %}
+        {% block javascripts %}
+        <script src="{{ asset('build/app.js') }}"></script>
+        {% endblock %}
     </body>
 </html>

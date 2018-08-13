@@ -100,7 +100,7 @@ class ExperimentController extends Controller
      * @Route("/check-in/new", name="experiment_check_in")
      * @Template
      */
-    public function checkIn(Experiment $experiment, Request $request)
+    public function checkIn(Experiment $experiment, Request $request, UserInterface $user)
     {
         if ($request->isMethod('post')) {
             $outcomeValues = $request->request->get('outcome');
@@ -112,6 +112,7 @@ class ExperimentController extends Controller
             $checkIn = new CheckIn();
             $checkIn->experiment = $experiment;
             $checkIn->date = new \DateTime();
+            $checkIn->collaborator = $user->getCollaborator();
 
             foreach ($outcomeValues as $outcomeUuid => $value) {
                 $checkedOutcome = new CheckedOutcome();

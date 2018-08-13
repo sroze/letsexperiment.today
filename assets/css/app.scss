@@ -1,0 +1,163 @@
+body {
+    background-color: white;
+}
+
+.letsexperiment-container {
+    padding: 20px 0;
+
+    .home-hero {
+        background: #4EA8EF;
+        border-radius: 5px;
+        margin: 10px 0 40px 0;
+
+        .promo {
+            padding: 50px;
+            color: #fff;
+        }
+
+        .create {
+            form {
+                padding: 40px 20px;
+
+                label {
+                    font-weight: bold;
+                    color: #fff;
+                }
+
+                button.btn {
+                    background: #65CA5C;
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+.experiment-transition {
+    font-style: italic;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.experiments {
+    padding: 20px 0;
+}
+
+.experiment-card {
+    margin-right: 20px;
+
+    ul.experiment-outcomes {
+        li {
+            display: flex;
+            flex-direction: row;
+
+            .experiment-name {
+                flex: 1;
+            }
+        }
+    }
+}
+
+form {
+    label {
+        font-weight: bold;
+    }
+}
+
+.experiment-check-in {
+    display: flex;
+    flex-direction: row;
+    background: #efefef;
+    padding: 20px 20px 10px 20px;
+    margin-bottom: 20px;
+
+    .experiment-summary {
+        width: 20rem;
+    }
+
+    .check-in-outcomes {
+        flex: 1;
+
+        .card {
+            margin-bottom: 10px;
+            margin-right: 10px;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+    }
+}
+
+.form-start-experiment {
+    background: #4EA8EF;
+    color: white;
+    border-radius: 5px;
+    margin: 20px 0;
+    padding: 20px;
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .submit-group {
+        text-align: right;
+
+        .btn.btn-success {
+            background: #65CA5C;
+            color: white;
+            padding: 20px;
+        }
+    }
+}
+
+.experiment-title {
+    padding: 20px;
+}
+
+q{
+    font-size: 30px;
+    quotes: "\201C""\201D""\2018""\2019";
+    padding: 10px 20px;
+    line-height: 1.4;
+}
+
+q:before {
+    content: open-quote;
+    display: inline;
+    height: 0;
+    line-height: 0;
+    left: -10px;
+    position: relative;
+    top: 5px;
+    color: #000;
+    font-size: 1.5em;
+    font-family: initial;
+}
+q:after {
+    content: close-quote;
+    display: inline;
+    height: 0;
+    line-height: 0;
+    left: 10px;
+    position: relative;
+    top: 5px;
+    color: #000;
+    font-size: 1.5em;
+    font-family: initial;
+}
+
+.experiment-check-ins {
+    padding: 20px 0;
+
+    .check-ins-placeholder {
+        background: #efefef;
+        padding: 50px;
+        text-align: center;
+    }
+}
+@media (max-width: 767px) {
+    .letsexperiment-container {
+        padding: inherit;
+    }
+}

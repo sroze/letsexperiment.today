@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+{% block body_attrs %} style="background: #efefef;"{% endblock %}
+{% block body %}
+    <div class="card" style="width: 28rem; margin: 50px auto;">
+        <div class="card-body">
+            {% block card_contents %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

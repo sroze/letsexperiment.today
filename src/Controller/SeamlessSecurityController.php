@@ -36,6 +36,14 @@ class SeamlessSecurityController extends Controller
     }
 
     /**
+     * @Route("/login", methods={"GET"})
+     */
+    public function loginForm()
+    {
+        return $this->render('Security/login_form.html.twig');
+    }
+
+    /**
      * @Route("/login", name="login", methods={"POST"})
      */
     public function login(Request $request)

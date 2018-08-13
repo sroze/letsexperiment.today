@@ -1,53 +1,107 @@
 {% extends "base.html.twig" %}
-{% block body %}
-<h1>{{ experiment.name }}</h1>
-{% for outcome in experiment.expectedOutcomes %}
-<ul>
-    <li>{{ outcome.name }} -  <em>{{ outcome.currentValue }}</em> -> <em>{{ outcome.expectedValue }}</em></li>
-</ul>
-{% endfor %}
-<hr/>
-{% if experiment.isStarted() %}
-    <h3>It's on-going!</h3>
-    <em>From:</em> {{ experiment.period.start | date }}
-        <br>
-    <em>To:</em> {{ experiment.period.end | date }}
-    <hr>
-    <a href="{{ path('experiment_check_in', {'id': experiment.uuid}) }}">Do a check-in</a>
-    <hr>
-    <h3>Last check-ins</h3>
-    <ul>
-        {% for checkIn in experiment.checkIns %}
-        <li>
-            <strong>{{ checkIn.date | date }}</strong>
-
-            <ul>
-                {% for checkedOutcome in checkIn.checkedOutcomes %}
-                <li>{{ checkedOutcome.expectedOutcome.name }} -> <em>{{ checkedOutcome.currentValue }}</em></li>
+{% block contents %}
+<h1 class="experiment-title">
+<q>{{ experiment.name }}</q>
+</h1>
+<div class="row experiment">
+    <div class="col-md-6">
+        <div class="card experiment-card">
+            <div class="card-body">
+                <h5 class="card-title">Expected outcomes</h5>
+                <p class="card-text">The list of measurable expected outcome at the end of the experiment.</p>
+            </div>
+            <ul class="list-group list-group-flush experiment-outcomes">
+                {% for expectedOutcome in experiment.expectedOutcomes %}
+                    <li class="list-group-item">
+                        <span class="experiment-name">{{ expectedOutcome.name }}</span>
+                        <span class="experiment-transition">{{ expectedOutcome.currentValue }} ➟ {{ expectedOutcome.expectedValue }}</span>
+                    </li>
                 {% endfor %}
             </ul>
-        </li>
-        {% endfor %}
-    </ul>
+            {% if not experiment.isStarted() %}
+            <div class="card-footer">
+                <form method="post" action="{{ path('experiment_add_outcome', {'id': experiment.uuid}) }}" name="new-outcome">
+                    <div class="form-fields" style="display: none;">
+                        <div class="form-group">
+                            <label for="outcome-name">New expected outcome</label>
+                            <input type="text" class="form-control" id="outcome-name" name="name" placeholder="Example: Increased number of experiments per month" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="current-value">Current value</label>
+                            <input type="text" class="form-control" id="current-value" name="currentValue" placeholder="Example: 1" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="current-value">Expected value</label>
+                            <input type="text" class="form-control" id="expected-value" name="expectedValue" placeholder="Example: 4" required />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Add outcome</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        {% if experiment.isStarted() %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa fa-rocket"></i> It's on-going</h5>
+                    <!-- <h6 class="card-subtitle mb-2 text-muted">X days remaining</h6> -->
+
+                    <p class="card-text"><strong>Started:</strong><br>{{ experiment.period.start | date }}</p>
+                    <p class="card-text"><strong>Will end:</strong><br>{{ experiment.period.end | date }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ path('experiment_check_in', {'id': experiment.uuid}) }}">Add a check-in</a>
+                </div>
+            </div>
+        {% else %}
+            {% include "Experiment/partials/collaborators_card.html.twig" %}
+        {% endif %}
+    </div>
+</div>
+{% if experiment.isStarted() %}
+<div class="experiment-check-ins">
+    <h3>Last check-ins</h3>
+    {% for checkIn in experiment.checkIns %}
+    <div class="experiment-check-in">
+        <div class="experiment-summary">
+            <p><strong>When</strong><br>{{ checkIn.date | date }}</p>
+            <p><strong>Who</strong><br>{{ checkIn.collaborator.email }}</p>
+        </div>
+
+        <div class="check-in-outcomes d-flex flex-wrap">
+            {% for checkedOutcome in checkIn.checkedOutcomes %}
+            <div class="card" style="width: 15rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ checkedOutcome.expectedOutcome.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted experiment-transition">➟ {{ checkedOutcome.currentValue }}</h6>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="check-ins-placeholder">
+        <p>Every week, you'll be invited to update the progress of the expected outcomes.<br>Here will be displayed your check-ins. </p>
+    </div>
+    {% endfor %}
+</div>
+<div class="row">
+    <div class="col-md-6">
+        {% include "Experiment/partials/collaborators_card.html.twig" %}
+    </div>
+</div>
 {% else %}
-    <form method="post" action="{{ path('experiment_add_outcome', {'id': experiment.uuid}) }}">
-        <label for="outcome-name">New expected outcome</label>
-        <input type="text" id="outcome-name" name="name" placeholder="Conversion rate" />
-
-        <label for="current-value">Current value</label>
-        <input type="text" id="current-value" name="currentValue" />
-
-        <label for="current-value">Expected value</label>
-        <input type="text" id="expected-value" name="expectedValue" />
-
-        <button type="submit">Add outcome</button>
-    </form>
-    <hr/>
-
-    {% if experiment.expectedOutcomes | length > 0 %}
-        <form method="post" action="{{ path('experiment_start', {'id': experiment.uuid}) }}">
+<form method="post" action="{{ path('experiment_start', {'id': experiment.uuid}) }}" class="form-start-experiment">
+    <div class="form-row">
+        <div class="form-group col-md-6">
             <label for="duration">Duration</label>
-            <select id="duration" name="duration">
+            <select id="duration" name="duration" class="form-control">
                 <option value="+3 months">3 months</option>
                 <option value="+1 month">1 month</option>
                 <option value="+2 weeks" selected>2 weeks</option>
@@ -57,22 +111,11 @@
                 <option value="+6 hours">6 hours</option>
                 <option value="+1 hour">1 hour</option>
             </select>
-
-            <button type="submit">Start</button>
-        </form>
-    {% endif %}
+        </div>
+        <div class="form-group col-md-6 submit-group">
+            <button type="submit" class="btn btn-success"{% if experiment.expectedOutcomes | length == 0 %} disabled="disabled"{% endif %}>Start experiment</button>
+        </div>
+    </div>
+</form>
 {% endif %}
-<hr>
-<h4>Collaborators</h4>
-<ul>
-    {% for collaborator in experiment.collaborators %}
-    <li>{{ collaborator.email }}</li>
-    {% endfor %}
-    <li>
-        <form method="post" action="{{ path('experiment_add_collaborator', {'id': experiment.uuid}) }}">
-            <input type="text" name="email" />
-            <button type="submit">Add</button>
-        </form>
-    </li>
-</ul>
 {% endblock %}

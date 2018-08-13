@@ -1,19 +1,24 @@
 {% extends "base.html.twig" %}
-{% block body %}
-<h1>Check-In for "{{ experiment.name }}"</h1>
+{% block contents %}
+<h1 class="experiment-title">
+    Check-In for
+    <q>{{ experiment.name }}</q>
+</h1>
 <form method="post">
-    <table>
-        <thead>
+    <table class="table">
+        <thead class="thead-light">
         <tr>
-            <th>Expected outcome</th>
-            <th>Current value</th>
+            <th scope="col">Expected outcome</th>
+            <th scope="col">Value, right now</th>
         </tr>
         </thead>
         <tbody>
         {% for expectedOutcome in experiment.expectedOutcomes %}
             <tr>
-                <td>{{ expectedOutcome.name }}</td>
-                <td><input title="Current value" type="text" name="outcome[{{ expectedOutcome.uuid }}]" /></td>
+                <td>{{ expectedOutcome.name }}<br><span class="experiment-transition">{{ expectedOutcome.currentValue }} ➟ {{ expectedOutcome.expectedValue }}</span> </td>
+                <td>
+                    <input title="Current value" type="text" name="outcome[{{ expectedOutcome.uuid }}]" class="form-control" />
+                </td>
             </tr>
         {% endfor %}
         </tbody>
@@ -21,7 +26,7 @@
         <tr>
             <td></td>
             <td>
-                <button type="submit">Check in</button>
+                <button type="submit" class="btn btn-primary">Check in</button>
             </td>
         </tr>
         </tfoot>
