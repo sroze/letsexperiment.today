@@ -28,7 +28,7 @@ class Collaborator
     public $email;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Experiment", mappedBy="collaborator")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Experiment", mappedBy="collaborators")
      *
      * @var Experiment[]
      */

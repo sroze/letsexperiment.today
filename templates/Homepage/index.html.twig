@@ -7,4 +7,15 @@
     <input type="text" name="name" placeholder="Type your experiment...">
     <button>Get started</button>
 </form>
+<hr>
+{% if experiments | length > 0 %}
+<h2>Your experiments</h2>
+<ul>
+{% for experiment in experiments %}
+    <li><a href="{{ path('experiment', {'id': experiment.uuid}) }}">{{ experiment.name }}</a></li>
+{% endfor %}
+</ul>
+{% else %}
+    The marketing things... :)
+{% endif %}
 {% endblock %}

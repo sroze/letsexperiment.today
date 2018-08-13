@@ -10,16 +10,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class HomepageController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="home")
      * @Template
      */
-    public function index()
+    public function index(UserInterface $user = null)
     {
-        return [];
+        $experiments = $user !== null ? $user->getCollaborator()->experiments : [];
+
+        return [
+            'experiments' => $experiments,
+        ];
     }
 
     /**

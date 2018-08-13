@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+{% block body %}
+{% if error is not empty %}
+    <p>{{ error }}</p>
+{% endif %}
+<form action="{{ path('login') }}" method="post">
+    <label for="email">Your email address</label>
+    <input name="email" id="email" type="text" required />
+
+    <input type="hidden" name="redirect_url" value="{{ redirect_url }}" />
+    <input type="hidden" name="current_route" value="{{ current_route }}" />
+
+    <button type="submit">Receive link</button>
+</form>
+{% endblock %}

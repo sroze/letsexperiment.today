@@ -8,6 +8,7 @@ use App\Entity\Collaborator;
 use App\Entity\ExpectedOutcome;
 use App\Entity\Experiment;
 use App\Entity\ExperimentPeriod;
+use App\SeamlessSecurity\Bridge\CollaboratorAsUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/e/{id}")
@@ -25,8 +27,20 @@ class ExperimentController extends Controller
      * @Route("", name="experiment")
      * @Template
      */
-    public function view(Experiment $experiment)
+    public function view(Experiment $experiment, UserInterface $user, EntityManagerInterface $entityManager)
     {
+        // If the 1st to arrive of the experiment... user is collaborator.
+        if (0 === count($experiment->collaborators)) {
+            if (!$user instanceof CollaboratorAsUser) {
+                throw new \InvalidArgumentException('User needs to be a collaborator');
+            }
+
+            $experiment->collaborators[] = $user->getCollaborator();
+
+            $entityManager->persist($experiment);
+            $entityManager->flush();
+        }
+
         return [
             'experiment' => $experiment,
         ];
