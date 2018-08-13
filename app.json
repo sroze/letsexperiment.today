@@ -31,6 +31,9 @@
     },
     "APP_SECRET": {
       "required": true
+    },
+    "NPM_CONFIG_PRODUCTION": {
+      "value": "false"
     }
   },
   "formation": {
