@@ -8,9 +8,12 @@ use App\Entity\Collaborator;
 use App\Entity\ExpectedOutcome;
 use App\Entity\Experiment;
 use App\Entity\ExperimentPeriod;
+use App\Events\AddedCollaborator;
+use App\Events\Events;
 use App\SeamlessSecurity\Bridge\CollaboratorAsUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -23,11 +26,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ExperimentController extends Controller
 {
+    private $entityManager;
+    private $eventDispatcher;
+
+    public function __construct(EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher)
+    {
+        $this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     /**
      * @Route("", name="experiment")
      * @Template
      */
-    public function view(Experiment $experiment, UserInterface $user, EntityManagerInterface $entityManager)
+    public function view(Experiment $experiment, UserInterface $user)
     {
         // If the 1st to arrive of the experiment... user is collaborator.
         if (0 === count($experiment->collaborators)) {
@@ -37,8 +49,8 @@ class ExperimentController extends Controller
 
             $experiment->collaborators[] = $user->getCollaborator();
 
-            $entityManager->persist($experiment);
-            $entityManager->flush();
+            $this->entityManager->persist($experiment);
+            $this->entityManager->flush();
         }
 
         return [
@@ -49,7 +61,7 @@ class ExperimentController extends Controller
     /**
      * @Route("/add-outcome", name="experiment_add_outcome", methods={"POST"})
      */
-    public function addOutcome(Experiment $experiment, Request $request, EntityManagerInterface $entityManager)
+    public function addOutcome(Experiment $experiment, Request $request)
     {
         $expectedOutcome = new ExpectedOutcome();
         $expectedOutcome->experiment = $experiment;
@@ -57,8 +69,8 @@ class ExperimentController extends Controller
         $expectedOutcome->currentValue = $request->get('currentValue');
         $expectedOutcome->expectedValue = $request->get('expectedValue');
 
-        $entityManager->persist($expectedOutcome);
-        $entityManager->flush();
+        $this->entityManager->persist($expectedOutcome);
+        $this->entityManager->flush();
 
         return $this->redirectToExperiment($experiment);
     }
@@ -66,7 +78,7 @@ class ExperimentController extends Controller
     /**
      * @Route("/start", name="experiment_start", methods={"POST"})
      */
-    public function start(Experiment $experiment, Request $request, EntityManagerInterface $entityManager)
+    public function start(Experiment $experiment, Request $request)
     {
         if (empty($duration = $request->request->get('duration'))) {
             throw new BadRequestHttpException('Duration is not valid');
@@ -78,8 +90,8 @@ class ExperimentController extends Controller
 
         $experiment->period = $period;
 
-        $entityManager->persist($experiment);
-        $entityManager->flush();
+        $this->entityManager->persist($experiment);
+        $this->entityManager->flush();
 
         return $this->redirectToExperiment($experiment);
     }
@@ -88,7 +100,7 @@ class ExperimentController extends Controller
      * @Route("/check-in/new", name="experiment_check_in")
      * @Template
      */
-    public function checkIn(Experiment $experiment, Request $request, EntityManagerInterface $entityManager)
+    public function checkIn(Experiment $experiment, Request $request)
     {
         if ($request->isMethod('post')) {
             $outcomeValues = $request->request->get('outcome');
@@ -104,14 +116,14 @@ class ExperimentController extends Controller
             foreach ($outcomeValues as $outcomeUuid => $value) {
                 $checkedOutcome = new CheckedOutcome();
                 $checkedOutcome->checkIn = $checkIn;
-                $checkedOutcome->expectedOutcome = $entityManager->find(ExpectedOutcome::class, $outcomeUuid);
+                $checkedOutcome->expectedOutcome = $this->entityManager->find(ExpectedOutcome::class, $outcomeUuid);
                 $checkedOutcome->currentValue = $value;
 
-                $entityManager->persist($checkedOutcome);
+                $this->entityManager->persist($checkedOutcome);
             }
 
-            $entityManager->persist($checkIn);
-            $entityManager->flush();
+            $this->entityManager->persist($checkIn);
+            $this->entityManager->flush();
 
             return $this->redirectToExperiment($experiment);
         }
@@ -124,14 +136,14 @@ class ExperimentController extends Controller
     /**
      * @Route("/collaborators/add", name="experiment_add_collaborator")
      */
-    public function addCollaborator(Experiment $experiment, Request $request, EntityManagerInterface $entityManager)
+    public function addCollaborator(Experiment $experiment, Request $request)
     {
         $email = $request->request->get('email');
         if (empty($email)) {
             throw new BadRequestHttpException('Collaborator\'s email is not valid');
         }
 
-        $collaborator = $entityManager->getRepository(Collaborator::class)->findOneBy([
+        $collaborator = $this->entityManager->getRepository(Collaborator::class)->findOneBy([
             'email' => $email,
         ]);
 
@@ -139,13 +151,15 @@ class ExperimentController extends Controller
             $collaborator = new Collaborator();
             $collaborator->email = $email;
 
-            $entityManager->persist($collaborator);
+            $this->entityManager->persist($collaborator);
         }
 
         $experiment->collaborators[] = $collaborator;
 
-        $entityManager->persist($experiment);
-        $entityManager->flush();
+        $this->eventDispatcher->dispatch(Events::ADD_COLLABORATOR, new AddedCollaborator($experiment, $collaborator));
+
+        $this->entityManager->persist($experiment);
+        $this->entityManager->flush();
 
         return $this->redirectToExperiment($experiment);
     }

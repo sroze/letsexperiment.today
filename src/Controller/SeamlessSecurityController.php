@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\SeamlessSecurity\Email\SeamlessSecurityMailer;
+use App\SeamlessSecurity\Link\LinkGenerator;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -16,22 +17,22 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class SeamlessSecurityController extends Controller
 {
-    private $jwtEncoder;
     private $userProvider;
     private $urlGenerator;
     private $securityMailer;
+    private $linkGenerator;
 
     public function __construct(
-        JWTEncoderInterface $jwtEncoder,
         UserProviderInterface $userProvider,
         UrlGeneratorInterface $urlGenerator,
-        SeamlessSecurityMailer $securityMailer
+        SeamlessSecurityMailer $securityMailer,
+        LinkGenerator $linkGenerator
     )
     {
-        $this->jwtEncoder = $jwtEncoder;
         $this->userProvider = $userProvider;
         $this->urlGenerator = $urlGenerator;
         $this->securityMailer = $securityMailer;
+        $this->linkGenerator = $linkGenerator;
     }
 
     /**
@@ -45,19 +46,9 @@ class SeamlessSecurityController extends Controller
         }
 
         $url = $request->get('redirect_url', $this->urlGenerator->generate('home'));
-
-        try {
-            $token = $this->jwtEncoder->encode([
-                'email' => $email,
-            ]);
-        } catch (JWTEncodeFailureException $e) {
-            throw new ServiceUnavailableHttpException(30, 'Could not create token', $e);
-        }
-
-        $link = $url.'?token='.$token;
+        $link = $this->linkGenerator->generateLink($email, $url);
 
         $this->securityMailer->sendLoginEmail($email, $link, $request);
-
 
         return $this->render('Security/email_sent.html.twig', [
             'link' => $link,
