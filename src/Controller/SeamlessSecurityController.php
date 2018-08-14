@@ -53,7 +53,7 @@ class SeamlessSecurityController extends Controller
             throw new BadRequestHttpException('Email is invalid');
         }
 
-        $url = $request->get('redirect_url', $this->urlGenerator->generate('home'));
+        $url = $request->get('redirect_url', $this->urlGenerator->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL));
         $link = $this->linkGenerator->generateLink($email, $url);
 
         $this->securityMailer->sendLoginEmail($email, $link, $request);
