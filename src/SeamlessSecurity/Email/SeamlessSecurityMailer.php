@@ -19,7 +19,7 @@ class SeamlessSecurityMailer
     {
         try {
             $contents = $this->twig->render(
-                'Security/emails/login_link.html.twig',
+                'security/emails/login_link.html.twig',
                 array('link' => $link)
             );
         } catch (\Exception $e) {

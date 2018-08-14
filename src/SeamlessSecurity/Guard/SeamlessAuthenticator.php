@@ -175,7 +175,7 @@ class SeamlessAuthenticator extends AbstractGuardAuthenticator
     private function renderLoginForm(Request $request, AuthenticationException $authException = null): Response
     {
         return new Response(
-            $this->environment->render('Security/login_form.html.twig', [
+            $this->environment->render('security/login_form.html.twig', [
                 'redirect_url' => $request->getUri(),
                 'current_route' => json_encode([
                     $request->attributes->get('_route'),

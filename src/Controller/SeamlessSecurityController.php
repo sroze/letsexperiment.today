@@ -40,7 +40,7 @@ class SeamlessSecurityController extends Controller
      */
     public function loginForm()
     {
-        return $this->render('Security/login_form.html.twig');
+        return $this->render('security/login_form.html.twig');
     }
 
     /**
@@ -58,7 +58,7 @@ class SeamlessSecurityController extends Controller
 
         $this->securityMailer->sendLoginEmail($email, $link, $request);
 
-        return $this->render('Security/email_sent.html.twig', [
+        return $this->render('security/email_sent.html.twig', [
             'link' => $link,
         ]);
     }

@@ -42,7 +42,7 @@ class Listener implements EventSubscriberInterface
 
         try {
             $contents = $this->twig->render(
-                'Experiment/emails/invited_has_collaborator.html.twig',
+                'experiment/emails/invited_has_collaborator.html.twig',
                 [
                     'link' => $this->linkGenerator->generateLink($event->collaborator->email, $experimentUrl),
                     'experiment' => $event->experiment,
