@@ -76,7 +76,7 @@
 
         <div class="check-in-outcomes d-flex flex-wrap">
             {% for checkedOutcome in checkIn.checkedOutcomes %}
-            <div class="card" style="width: 15rem;">
+            <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{ checkedOutcome.expectedOutcome.name }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted experiment-transition">➟ {{ checkedOutcome.currentValue }}</h6>

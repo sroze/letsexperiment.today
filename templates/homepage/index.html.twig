@@ -16,12 +16,11 @@
         </form>
     </div>
 </article>
-<article>
 {% if experiments | length > 0 %}
 <h3>Your experiments</h3>
 <div class="experiments d-flex flex-wrap">
 {% for experiment in experiments %}
-    <div class="card experiment-card" style="width: 18rem;">
+    <div class="card experiment-card">
         <div class="card-body">
             <h5 class="card-title">{{ experiment.name }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">
@@ -48,19 +47,18 @@
 </div>
 <hr/>
 {% endif %}
-    <div class="row">
-        <div class="col-md-4">
-            <h4><i class="fa fa-key"></i> Measurable results</h4>
-            <p>When creating an experiment, you set a number of measurable <em>expected</em> outcomes. These will help you to conclude whether the experiment is successful or not.</p>
-        </div>
-        <div class="col-md-4">
-            <h4><i class="far fa-clock"></i> Track them over-time</h4>
-            <p>Every week, we will send you an overview of your on-going experiments and invite you to <em>check-in</em> to update the measurable expected outcomes.</p>
-        </div>
-        <div class="col-md-4">
-            <h4><i class="fa fa-users"></i> Collaborate</h4>
-            <p>Invite as many collaborators as you'd like to collaborate on your experiments. They will also be notified when something happens to the experimentation.</p>
-        </div>
+<article class="row">
+    <div class="col-md-4">
+        <h4><i class="fa fa-key"></i> Measurable results</h4>
+        <p>When creating an experiment, you set a number of measurable <em>expected</em> outcomes. These will help you to conclude whether the experiment is successful or not.</p>
+    </div>
+    <div class="col-md-4">
+        <h4><i class="far fa-clock"></i> Track them over-time</h4>
+        <p>Every week, we will send you an overview of your on-going experiments and invite you to <em>check-in</em> to update the measurable expected outcomes.</p>
+    </div>
+    <div class="col-md-4">
+        <h4><i class="fa fa-users"></i> Collaborate</h4>
+        <p>Invite as many collaborators as you'd like to collaborate on your experiments. They will also be notified when something happens to the experimentation.</p>
     </div>
 </article>
 {% endblock %}

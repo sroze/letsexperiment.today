@@ -3,7 +3,8 @@ body {
 }
 
 .letsexperiment-container {
-    padding: 20px 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
 
     .home-hero {
         background: #4EA8EF;
@@ -41,10 +42,15 @@ body {
 
 .experiments {
     padding: 20px 0;
+
+    .experiment-card {
+        width: 18rem;
+    }
 }
 
 .experiment-card {
     margin-right: 20px;
+    margin-bottom: 20px;
 
     ul.experiment-outcomes {
         li {
@@ -81,6 +87,7 @@ form {
         .card {
             margin-bottom: 10px;
             margin-right: 10px;
+            width: 15rem;
         }
 
         .card-body {
@@ -156,8 +163,31 @@ q:after {
         text-align: center;
     }
 }
+
+.card-fullscreen {
+    width: 28rem;
+    margin: 50px auto;
+}
+
 @media (max-width: 767px) {
-    .letsexperiment-container {
-        padding: inherit;
+    .card-fullscreen {
+        width: initial;
+        margin: 50px 20px;
+    }
+
+    .experiments {
+        .experiment-card {
+            width: initial;
+        }
+    }
+
+    .experiment-check-in {
+        flex-direction: column;
+
+        .check-in-outcomes {
+            .card {
+                width: 100%;
+            }
+        }
     }
 }
