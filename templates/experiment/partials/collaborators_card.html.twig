@@ -6,17 +6,22 @@
         {% for collaborator in experiment.collaborators %}
             <li class="list-group-item">
                 <span>{{ collaborator.email }}</span>
+
+                {% if is_granted('EDIT', experiment) %}
                 <form class="float-right" action="{{ path('experiment_remove_collaborator', {'id': experiment.uuid}) }}" method="post" onsubmit="return confirm('Are you sure to remove this collaborator?');">
                     <input type="hidden" name="email" value="{{ collaborator.email }}" />
                     <button type="submit" class="btn btn-danger btn-sm">X</button>
                 </form>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>
+    {% if is_granted('EDIT', experiment) %}
     <div class="card-footer">
         <form method="post" action="{{ path('experiment_add_collaborator', {'id': experiment.uuid}) }}" class="form-row">
             <input type="email" name="email" class="form-control" style="flex: 1; width: initial;" placeholder="Email address" required />
             <button type="submit" class="btn btn-primary">Add</button>
         </form>
     </div>
+    {% endif %}
 </div>

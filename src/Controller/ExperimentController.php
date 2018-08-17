@@ -20,6 +20,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -61,6 +62,7 @@ class ExperimentController extends Controller
 
     /**
      * @Route("/outcomes", name="experiment_add_outcome", methods={"POST"})
+     * @Security("is_granted('EDIT', experiment)")
      */
     public function addOutcome(Experiment $experiment, Request $request)
     {
@@ -79,6 +81,7 @@ class ExperimentController extends Controller
     /**
      * @Route("/outcomes/{outcomeUuid}/remove", name="experiment_remove_outcome", methods={"POST"})
      * @ParamConverter("outcome", options={"id" = "outcomeUuid"})
+     * @Security("is_granted('EDIT', experiment)")
      */
     public function removeOutcome(Experiment $experiment, ExpectedOutcome $outcome)
     {
@@ -90,6 +93,7 @@ class ExperimentController extends Controller
 
     /**
      * @Route("/start", name="experiment_start", methods={"POST"})
+     * @Security("is_granted('EDIT', experiment)")
      */
     public function start(Experiment $experiment, Request $request)
     {
@@ -111,6 +115,7 @@ class ExperimentController extends Controller
 
     /**
      * @Route("/check-in/new", name="experiment_check_in")
+     * @Security("is_granted('EDIT', experiment)")
      * @Template
      */
     public function checkIn(Experiment $experiment, Request $request, UserInterface $user)
@@ -149,6 +154,7 @@ class ExperimentController extends Controller
 
     /**
      * @Route("/collaborators/add", name="experiment_add_collaborator")
+     * @Security("is_granted('EDIT', experiment)")
      */
     public function addCollaborator(Experiment $experiment, Request $request)
     {
@@ -180,6 +186,7 @@ class ExperimentController extends Controller
 
     /**
      * @Route("/collaborators/remove", name="experiment_remove_collaborator")
+     * @Security("is_granted('EDIT', experiment)")
      */
     public function removeCollaborator(Experiment $experiment, Request $request)
     {

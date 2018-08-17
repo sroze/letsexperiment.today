@@ -15,7 +15,7 @@
                     <li class="list-group-item">
                         <span class="experiment-name">{{ expectedOutcome.name }}</span>
                         <span class="experiment-transition">{{ expectedOutcome.currentValue }} ➟ {{ expectedOutcome.expectedValue }}</span>
-                        {% if not experiment.isStarted() %}
+                        {% if not experiment.isStarted() and is_granted('EDIT', experiment) %}
                         <form class="removal-form" action="{{ path('experiment_remove_outcome', {'id': experiment.uuid, 'outcomeUuid': expectedOutcome.uuid}) }}" method="post" onsubmit="return confirm('Are you sure to remove this expected outcome?');">
                             <button type="submit" class="btn btn-danger btn-sm">X</button>
                         </form>
@@ -23,7 +23,7 @@
                     </li>
                 {% endfor %}
             </ul>
-            {% if not experiment.isStarted() %}
+            {% if not experiment.isStarted() and is_granted('EDIT', experiment) %}
             <div class="card-footer">
                 <form method="post" action="{{ path('experiment_add_outcome', {'id': experiment.uuid}) }}" name="new-outcome">
                     <div class="form-fields" style="display: none;">
@@ -60,9 +60,11 @@
                     <p class="card-text"><strong>Started:</strong><br>{{ experiment.period.start | date }}</p>
                     <p class="card-text"><strong>Will end:</strong><br>{{ experiment.period.end | date }}</p>
                 </div>
+                {% if is_granted('EDIT', experiment) %}
                 <div class="card-footer">
                     <a href="{{ path('experiment_check_in', {'id': experiment.uuid}) }}">Add a check-in</a>
                 </div>
+                {% endif %}
             </div>
         {% else %}
             {% include "experiment/partials/collaborators_card.html.twig" %}
@@ -102,25 +104,27 @@
     </div>
 </div>
 {% else %}
-<form method="post" action="{{ path('experiment_start', {'id': experiment.uuid}) }}" class="form-start-experiment">
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="duration">Duration</label>
-            <select id="duration" name="duration" class="form-control">
-                <option value="+3 months">3 months</option>
-                <option value="+1 month">1 month</option>
-                <option value="+2 weeks" selected>2 weeks</option>
-                <option value="+1 week">1 week</option>
-                <option value="+3 days">3 days</option>
-                <option value="+1 day">1 day</option>
-                <option value="+6 hours">6 hours</option>
-                <option value="+1 hour">1 hour</option>
-            </select>
+    {% if is_granted('EDIT', experiment) %}
+    <form method="post" action="{{ path('experiment_start', {'id': experiment.uuid}) }}" class="form-start-experiment">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="duration">Duration</label>
+                <select id="duration" name="duration" class="form-control">
+                    <option value="+3 months">3 months</option>
+                    <option value="+1 month">1 month</option>
+                    <option value="+2 weeks" selected>2 weeks</option>
+                    <option value="+1 week">1 week</option>
+                    <option value="+3 days">3 days</option>
+                    <option value="+1 day">1 day</option>
+                    <option value="+6 hours">6 hours</option>
+                    <option value="+1 hour">1 hour</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6 submit-group">
+                <button type="submit" class="btn btn-success"{% if experiment.expectedOutcomes | length == 0 %} disabled="disabled"{% endif %}>Start experiment</button>
+            </div>
         </div>
-        <div class="form-group col-md-6 submit-group">
-            <button type="submit" class="btn btn-success"{% if experiment.expectedOutcomes | length == 0 %} disabled="disabled"{% endif %}>Start experiment</button>
-        </div>
-    </div>
-</form>
+    </form>
+    {% endif %}
 {% endif %}
 {% endblock %}
