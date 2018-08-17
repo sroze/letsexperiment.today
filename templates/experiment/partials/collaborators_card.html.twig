@@ -6,6 +6,10 @@
         {% for collaborator in experiment.collaborators %}
             <li class="list-group-item">
                 <span>{{ collaborator.email }}</span>
+                <form class="float-right" action="{{ path('experiment_remove_collaborator', {'id': experiment.uuid}) }}" method="post" onsubmit="return confirm('Are you sure to remove this collaborator?');">
+                    <input type="hidden" name="email" value="{{ collaborator.email }}" />
+                    <button type="submit" class="btn btn-danger btn-sm">X</button>
+                </form>
             </li>
         {% endfor %}
     </ul>

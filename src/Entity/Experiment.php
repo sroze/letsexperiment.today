@@ -62,6 +62,7 @@ class Experiment
     public function __construct()
     {
         $this->expectedOutcomes = new ArrayCollection();
+        $this->collaborators = new ArrayCollection();
     }
 
     public function isStarted()

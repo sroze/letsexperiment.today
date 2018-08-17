@@ -165,6 +165,26 @@ class ExperimentController extends Controller
         return $this->redirectToExperiment($experiment);
     }
 
+    /**
+     * @Route("/collaborators/remove", name="experiment_remove_collaborator")
+     */
+    public function removeCollaborator(Experiment $experiment, Request $request)
+    {
+        $email = $request->request->get('email');
+        if (empty($email)) {
+            throw new BadRequestHttpException('Collaborator\'s email is not valid');
+        }
+
+        $experiment->collaborators = $experiment->collaborators->filter(function(Collaborator $collaborator) use ($email) {
+            return $collaborator->email !== $email;
+        });
+
+        $this->entityManager->persist($experiment);
+        $this->entityManager->flush();
+
+        return $this->redirectToExperiment($experiment);
+    }
+
     private function redirectToExperiment(Experiment $experiment): RedirectResponse
     {
         return $this->redirectToRoute('experiment', [
