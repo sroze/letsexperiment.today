@@ -15,6 +15,11 @@
                     <li class="list-group-item">
                         <span class="experiment-name">{{ expectedOutcome.name }}</span>
                         <span class="experiment-transition">{{ expectedOutcome.currentValue }} ➟ {{ expectedOutcome.expectedValue }}</span>
+                        {% if not experiment.isStarted() %}
+                        <form class="removal-form" action="{{ path('experiment_remove_outcome', {'id': experiment.uuid, 'outcomeUuid': expectedOutcome.uuid}) }}" method="post" onsubmit="return confirm('Are you sure to remove this expected outcome?');">
+                            <button type="submit" class="btn btn-danger btn-sm">X</button>
+                        </form>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>

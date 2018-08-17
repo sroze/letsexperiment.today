@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -59,7 +60,7 @@ class ExperimentController extends Controller
     }
 
     /**
-     * @Route("/add-outcome", name="experiment_add_outcome", methods={"POST"})
+     * @Route("/outcomes", name="experiment_add_outcome", methods={"POST"})
      */
     public function addOutcome(Experiment $experiment, Request $request)
     {
@@ -70,6 +71,18 @@ class ExperimentController extends Controller
         $expectedOutcome->expectedValue = $request->get('expectedValue');
 
         $this->entityManager->persist($expectedOutcome);
+        $this->entityManager->flush();
+
+        return $this->redirectToExperiment($experiment);
+    }
+
+    /**
+     * @Route("/outcomes/{outcomeUuid}/remove", name="experiment_remove_outcome", methods={"POST"})
+     * @ParamConverter("outcome", options={"id" = "outcomeUuid"})
+     */
+    public function removeOutcome(Experiment $experiment, ExpectedOutcome $outcome)
+    {
+        $this->entityManager->remove($outcome);
         $this->entityManager->flush();
 
         return $this->redirectToExperiment($experiment);

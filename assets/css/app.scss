@@ -60,6 +60,16 @@ body {
             .experiment-name {
                 flex: 1;
             }
+
+            .removal-form {
+                margin-left: 10px;
+                margin-right: -10px;
+
+                .btn-sm {
+                    padding-top: 0.05rem;
+                    padding-bottom: 0.05rem;
+                }
+            }
         }
     }
 }
