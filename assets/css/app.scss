@@ -38,6 +38,12 @@ body {
     font-style: italic;
     color: #555;
     font-size: 0.9rem;
+    text-align: right;
+
+    .last-value {
+        font-weight: bold;
+        font-style: normal;
+    }
 }
 
 .experiments {

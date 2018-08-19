@@ -67,6 +67,11 @@ class Experiment
         $this->checkIns = new ArrayCollection();
     }
 
+    public function hasEnded()
+    {
+        return $this->isStarted() && $this->period->end < new \DateTime();
+    }
+
     public function isStarted()
     {
         return $this->period->end !== null && $this->period->start !== null;
