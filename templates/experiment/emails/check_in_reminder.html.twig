@@ -1,0 +1,29 @@
+<h1>Check-in reminder for {{ experiments | length }} on-going experiment(s)</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Experiment</th>
+        <th>Last check-in</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    {% for experiment in experiments %}
+        <tr>
+            <td>{{ experiment.name }}</td>
+            <td>
+                {% set lastCheckIn = experiment.lastCheckIn() %}
+                {% if lastCheckIn is not null %}
+                    <span>{{ lastCheckIn.date | time_diff }}</span>
+                {% else %}
+                    <span>Never checked-in</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url('experiment_check_in', {'id': experiment.uuid}) }}" class="btn">Check-in</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<p>See you there, <br/>Sam.</p>

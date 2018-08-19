@@ -24,7 +24,9 @@
         "symfony/web-link": "^4.1",
         "symfony/webpack-encore-pack": "^1.0",
         "symfony/yaml": "^4.1",
-        "twig/extensions": "^1.5"
+        "tijsverkoyen/css-to-inline-styles": "^2.2",
+        "tplaner/when": "^2.1",
+        "twig/extensions": "dev-ignore-identity-translator"
     },
     "require-dev": {
         "behat/symfony2-extension": "^2.1",
@@ -77,5 +79,8 @@
         "symfony": {
             "allow-contrib": false
         }
-    }
+    },
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/sroze/twig-extensions" }
+    ]
 }

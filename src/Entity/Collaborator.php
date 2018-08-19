@@ -40,4 +40,9 @@ class Collaborator
      * @var CheckIn[]
      */
     public $checkIns;
+
+    public function __construct(string $email)
+    {
+        $this->email = $email;
+    }
 }

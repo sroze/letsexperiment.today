@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,10 +64,22 @@ class Experiment
     {
         $this->expectedOutcomes = new ArrayCollection();
         $this->collaborators = new ArrayCollection();
+        $this->checkIns = new ArrayCollection();
     }
 
     public function isStarted()
     {
         return $this->period->end !== null && $this->period->start !== null;
+    }
+
+    public function lastCheckIn() : ?CheckIn
+    {
+        $lastCriteria = Criteria::create()
+            ->setFirstResult(1)
+            ->orderBy(array('date' => Criteria::DESC));
+
+        $lastCheckIn = $this->checkIns->matching($lastCriteria)->first();
+
+        return $lastCheckIn !== false ? $lastCheckIn : null;
     }
 }

@@ -1,0 +1,37 @@
+<h1>Experiment "{{ experiment.name }}" has ended!</h1>
+
+<p>It has started {{ experiment.period.start | time_diff }}. Here is your outcome(s) overview:</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Expected outcome</th>
+        <th>Initial value</th>
+        <th>Final value</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for expectedOutcome in experiment.expectedOutcomes %}
+        <tr>
+            <td>{{ expectedOutcome.name }}</td>
+            <td>{{ expectedOutcome.currentValue }}</td>
+            <td>
+                {% set lastCheckIn = experiment.lastCheckIn() %}
+                {% if lastCheckIn is not null %}
+                <span>{{ lastCheckIn.checkedOutcomeForExpectedOutcome(expectedOutcome).currentValue }}</span>
+                {% else %}
+                <span>Never checked-in</span>
+                {% endif %}
+                <br>
+                <span class="small">Expected: {{ expectedOutcome.expectedValue }}</span>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<p>
+    <a href="{{ url('experiment', {'id': experiment.uuid}) }}" class="btn">Open experiment</a>
+</p>
+
+<p>See you there, <br/>Sam.</p>

@@ -11,19 +11,17 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class Listener implements EventSubscriberInterface
 {
-    private $mailer;
-    private $twig;
     private $linkGenerator;
     private $urlGenerator;
     private $tokenStorage;
+    private $renderAndSendEmails;
 
-    public function __construct(\Swift_Mailer $mailer, \Twig_Environment $twig, LinkGenerator $linkGenerator, UrlGeneratorInterface $urlGenerator, TokenStorageInterface $tokenStorage)
+    public function __construct(LinkGenerator $linkGenerator, UrlGeneratorInterface $urlGenerator, TokenStorageInterface $tokenStorage, RenderAndSendEmails $renderAndSendEmails)
     {
-        $this->mailer = $mailer;
-        $this->twig = $twig;
         $this->linkGenerator = $linkGenerator;
         $this->urlGenerator = $urlGenerator;
         $this->tokenStorage = $tokenStorage;
+        $this->renderAndSendEmails = $renderAndSendEmails;
     }
 
     /**
@@ -38,26 +36,17 @@ class Listener implements EventSubscriberInterface
 
     public function addedCollaborator(AddedCollaborator $event)
     {
-        $experimentUrl = $this->urlGenerator->generate('experiment', ['id' => $event->experiment->uuid]);
+        $experimentUrl = $this->urlGenerator->generate('experiment', ['id' => $event->experiment->uuid], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        try {
-            $contents = $this->twig->render(
-                'experiment/emails/invited_has_collaborator.html.twig',
-                [
-                    'link' => $this->linkGenerator->generateLink($event->collaborator->email, $experimentUrl),
-                    'experiment' => $event->experiment,
-                    'inviter' => $this->tokenStorage->getToken()->getUser()->getCollaborator(),
-                ]
-            );
-        } catch (\Exception $e) {
-            throw new \RuntimeException('Could not send email', $e->getCode(), $e);
-        }
-
-        $message = (new \Swift_Message(sprintf('Collaborate on "%s"', $event->experiment->name)))
-            ->setFrom('samuel@letsexperiment.today', 'Samuel from LetsExperiment.today')
-            ->setTo($event->collaborator->email)
-            ->setBody($contents,'text/html');
-
-        $this->mailer->send($message);
+        $this->renderAndSendEmails->renderAndSend(
+            $event->collaborator->email,
+            sprintf('Collaborate with me on "%s"', $event->experiment->name),
+            'experiment/emails/invited_has_collaborator.html.twig',
+            [
+                'link' => $this->linkGenerator->generateLink($event->collaborator->email, $experimentUrl),
+                'experiment' => $event->experiment,
+                'inviter' => $this->tokenStorage->getToken()->getUser()->getCollaborator(),
+            ]
+        );
     }
 }

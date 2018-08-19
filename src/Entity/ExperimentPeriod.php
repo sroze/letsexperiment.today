@@ -22,4 +22,10 @@ class ExperimentPeriod
      * @var \DateTime
      */
     public $end;
+
+    public function __construct(\DateTime $start = null, \DateTime $end = null)
+    {
+        $this->start = $start;
+        $this->end = $end;
+    }
 }

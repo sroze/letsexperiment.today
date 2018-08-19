@@ -53,4 +53,15 @@ class CheckIn
     {
         $this->checkedOutcomes = new ArrayCollection();
     }
+
+    public function checkedOutcomeForExpectedOutcome(ExpectedOutcome $expectedOutcome) : ?CheckedOutcome
+    {
+        foreach ($this->checkedOutcomes as $outcome) {
+            if ($outcome->expectedOutcome->uuid === $expectedOutcome->uuid) {
+                return $outcome;
+            }
+        }
+
+        return null;
+    }
 }

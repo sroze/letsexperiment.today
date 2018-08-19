@@ -1,0 +1,7 @@
+services:
+    App\Emails\Mailer:
+        class: App\Tests\Emails\InMemoryMailer
+    App\Repository\ExperimentRepository:
+        class: App\Tests\Repository\InMemoryExperimentRepository
+    App\Repository\SentEmailRecordRepository:
+        class: App\Tests\Repository\InMemorySentEmailRecordRepository

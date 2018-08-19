@@ -4,6 +4,11 @@ default:
             contexts:
                 - FeatureContext:
                     kernel: '@kernel'
+                    mailer: '@App\Emails\Mailer'
+                    experimentRepository: '@App\Repository\ExperimentRepository'
+                    sentEmailRecordRepository: '@App\Repository\SentEmailRecordRepository'
+                    renderAndSendEmails: '@App\Emails\RenderAndSendEmails'
+                    urlGenerator: '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
 
     extensions:
         Behat\Symfony2Extension:
