@@ -171,8 +171,7 @@ class ExperimentController extends Controller
         ]);
 
         if (null === $collaborator) {
-            $collaborator = new Collaborator();
-            $collaborator->email = $email;
+            $collaborator = new Collaborator($email);
 
             $this->entityManager->persist($collaborator);
         }

@@ -28,8 +28,7 @@ class CollaboratorProvider implements UserProviderInterface
         ]);
 
         if (null === $collaborator) {
-            $collaborator = new Collaborator();
-            $collaborator->email = $username;
+            $collaborator = new Collaborator($username);
 
             $this->entityManager->persist($collaborator);
             $this->entityManager->flush();
