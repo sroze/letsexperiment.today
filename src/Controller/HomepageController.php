@@ -34,6 +34,7 @@ class HomepageController extends Controller
     {
         $experiment = new Experiment();
         $experiment->name = $request->request->get('name');
+        $experiment->createdAt = new \DateTime();
 
         if (empty($experiment->name)) {
             throw new BadRequestHttpException('Name of the experiment should not be blank');

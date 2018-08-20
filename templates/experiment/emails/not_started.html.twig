@@ -1,0 +1,11 @@
+<h1>Experiment "{{ experiment.name }}" is not yet started!</h1>
+
+<p>Created {{ experiment.createdAt | default('-2 days') | time_diff }}, it has not been started yet. Start the experiment
+to periodically check-in its impact on the expected outcomes. After the experiment has ended, you will receive an outcome
+overview that will help you to decide whether or not you should continue going into this direction.</p>
+
+<p>
+    <a href="{{ url('experiment', {'id': experiment.uuid}) }}" class="btn">Open and start the experiment</a>
+</p>
+
+<p>See you there, <br/>Sam.</p>

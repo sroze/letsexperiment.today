@@ -44,10 +44,19 @@ class SendEmailsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $now = new \DateTime();
+        $twoDaysAgo = \DateTime::createFromFormat('U', strtotime('-2 days'));
+
         $experimentForWhichWeNeedToSendCheckInReminders = [];
 
         foreach ($this->experimentRepository->findAll() as $experiment) {
             if (!$experiment->isStarted()) {
+                $shouldHaveSentStartReminder = $experiment->createdAt === null || $experiment->createdAt < $twoDaysAgo;
+
+                if ($shouldHaveSentStartReminder &&
+                    !$this->sentEmailRecordRepository->hasSent($experiment, $experiment->createdAt ?: $twoDaysAgo, 'experiment-not-started')) {
+                    $this->sendExperimentNotStarted($experiment, $output);
+                }
+
                 continue;
             }
 
@@ -139,6 +148,23 @@ class SendEmailsCommand extends Command
 
         foreach ($experiments as $experiment) {
             $this->sentEmailRecordRepository->record(new SentEmailRecord($experiment, 'check-in-reminder', $collaboratorEmail));
+        }
+    }
+
+    private function sendExperimentNotStarted(Experiment $experiment, OutputInterface $output)
+    {
+        foreach ($experiment->collaborators as $collaborator) {
+            $output->writeln('Sent not started reminder for experiment #'.$experiment->uuid.' to '.$collaborator->email);
+            $this->renderAndSendEmails->renderAndSend(
+                $collaborator->email,
+                sprintf('Experiment "%s" is not started yet', $experiment->name),
+                'experiment/emails/not_started.html.twig',
+                [
+                    'experiment' => $experiment,
+                ]
+            );
+
+            $this->sentEmailRecordRepository->record(new SentEmailRecord($experiment, 'experiment-not-started', $collaborator->email));
         }
     }
 }

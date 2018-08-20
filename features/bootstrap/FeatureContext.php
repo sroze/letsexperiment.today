@@ -55,6 +55,18 @@ class FeatureContext implements Context
     }
 
     /**
+     * @Given the experiment :uuid has been created :creationDate
+     */
+    public function theExperimentHasBeenCreated($uuid, $creationDate)
+    {
+        $experiment = new \App\Entity\Experiment();
+        $experiment->uuid = $uuid;
+        $experiment->createdAt = DateTime::createFromFormat('U', strtotime($creationDate));
+
+        $this->experimentRepository->save($experiment);
+    }
+
+    /**
      * @Given the experiment :uuid has been started :startDate
      */
     public function theExperimentHasBeenStarted($uuid, $startDate)

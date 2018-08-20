@@ -30,6 +30,18 @@ class EmailController extends AbstractController
     }
 
     /**
+     * @Route("/emails/not-started")
+     */
+    public function emailNotStarted(Request $request)
+    {
+        return $this->render('experiment/emails/not_started.html.twig', [
+            'experiment' => $this->experimentRepository->find(
+                $request->get('experiment')
+            ),
+        ]);
+    }
+
+    /**
      * @Route("/emails/has-ended")
      */
     public function emailEnd(Request $request)

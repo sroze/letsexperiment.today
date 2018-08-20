@@ -60,6 +60,13 @@ class Experiment
      */
     public $period;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var \DateTime
+     */
+    public $createdAt;
+
     public function __construct()
     {
         $this->expectedOutcomes = new ArrayCollection();
@@ -74,7 +81,7 @@ class Experiment
 
     public function isStarted()
     {
-        return $this->period->end !== null && $this->period->start !== null;
+        return $this->period !== null && $this->period->end !== null && $this->period->start !== null;
     }
 
     public function lastCheckIn() : ?CheckIn
