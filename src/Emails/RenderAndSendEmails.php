@@ -34,6 +34,9 @@ class RenderAndSendEmails
             ->setTo($recipient)
             ->setBody($contentsWithInlineStyle,'text/html');
 
+        $headers = $message->getHeaders();
+        $headers->addTextHeader('X-MC-Tags', $template);
+
         $this->mailer->send($message);
     }
 }
