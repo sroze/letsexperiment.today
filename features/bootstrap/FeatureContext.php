@@ -17,6 +17,8 @@ class FeatureContext implements Context
     private $application;
     private $experimentRepository;
     private $mailer;
+    private $kernel;
+    private $tokenGenerator;
 
     public function __construct(
         KernelInterface $kernel,
@@ -24,6 +26,7 @@ class FeatureContext implements Context
         \App\Tests\Repository\InMemoryExperimentRepository $experimentRepository,
         \App\Tests\Repository\InMemorySentEmailRecordRepository $sentEmailRecordRepository,
         \App\Emails\RenderAndSendEmails $renderAndSendEmails,
+        \App\SeamlessSecurity\Guard\TokenGenerator $tokenGenerator,
         \Symfony\Component\Routing\Generator\UrlGeneratorInterface $urlGenerator
     )
     {
@@ -36,6 +39,19 @@ class FeatureContext implements Context
             $renderAndSendEmails,
             $urlGenerator
         ));
+        $this->kernel = $kernel;
+        $this->tokenGenerator = $tokenGenerator;
+    }
+
+    /**
+     * @Given there is an experiment :uuid
+     */
+    public function thereIsAnExperiment($uuid)
+    {
+        $experiment = new \App\Entity\Experiment();
+        $experiment->uuid = $uuid;
+
+        $this->experimentRepository->save($experiment);
     }
 
     /**
@@ -73,7 +89,18 @@ class FeatureContext implements Context
     }
 
     /**
+     * @When I start the experiment :uuid as collaborator :email for :duration
+     */
+    public function iStartTheExperimentAsCollaborator($uuid, $email, $duration)
+    {
+        $this->request('/e/'.$uuid.'/start?token='.$this->tokenGenerator->generateToken($email), 'post', [
+            'duration' => $duration,
+        ]);
+    }
+
+    /**
      * @Then a check-in reminder should have been sent to :email
+     * @Then a email should have been sent to :email
      */
     public function aCheckInReminderShouldHaveBeenSentTo($email)
     {
@@ -89,6 +116,7 @@ class FeatureContext implements Context
 
     /**
      * @Then a check-in reminder should NOT have been sent to :email
+     * @Then a email should NOT have been sent to :email
      */
     public function aCheckInReminderShouldNotHaveBeenSentTo($email)
     {
@@ -97,5 +125,31 @@ class FeatureContext implements Context
                 throw new \RuntimeException(sprintf('Email sent to %s sent.', $email));
             }
         }
+    }
+
+    private function request(string $uri, string $method, array $parameters, array $cookies = array())
+    {
+        $response = $this->kernel->handle(Request::create(
+            $uri,
+            $method,
+            $parameters,
+            $cookies
+        ));
+
+        if ($response->getStatusCode() === 302) {
+            $requestCookies = $cookies;
+            foreach ($response->headers->getCookies() as $cookie) {
+                $requestCookies[$cookie->getName()] = $cookie->getValue();
+            }
+
+            return $this->request(
+                $response->headers->get('Location'),
+                false !== strpos($uri, 'token') ? $method : 'get',
+                $parameters,
+                $requestCookies
+            );
+        }
+
+        return $response;
     }
 }

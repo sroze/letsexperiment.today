@@ -10,6 +10,7 @@ use App\Entity\Experiment;
 use App\Entity\ExperimentPeriod;
 use App\Events\AddedCollaborator;
 use App\Events\Events;
+use App\Events\ExperimentStarted;
 use App\SeamlessSecurity\Bridge\CollaboratorAsUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -109,6 +110,8 @@ class ExperimentController extends Controller
 
         $this->entityManager->persist($experiment);
         $this->entityManager->flush();
+
+        $this->eventDispatcher->dispatch(Events::START_EXPERIMENT, new ExperimentStarted($experiment));
 
         return $this->redirectToExperiment($experiment);
     }
