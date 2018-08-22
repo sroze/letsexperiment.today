@@ -19,3 +19,9 @@ Feature:
     And the experiment "EBFED3F1-0FE6-4015-BB47-9AF0EA02A808" has the collaborator "samuel.roze@gmail.com"
     When I run the command "send-emails"
     Then a check-in reminder should NOT have been sent to "samuel.roze@gmail.com"
+
+  Scenario: Reminder is sent 3 hours before the starting time
+    Given the experiment "EBFED3F1-0FE6-4015-BB47-9AF0EA02A808" has been started "-7 days +2 hours"
+    And the experiment "EBFED3F1-0FE6-4015-BB47-9AF0EA02A808" has the collaborator "samuel.roze@gmail.com"
+    When I run the command "send-emails"
+    Then a check-in reminder should have been sent to "samuel.roze@gmail.com"

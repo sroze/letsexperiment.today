@@ -44,8 +44,11 @@ class SendEmailsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $now = new \DateTime();
-        $twoDaysAgo = \DateTime::createFromFormat('U', strtotime('-2 days'));
+        // Add 3 hours so that it can be "prepared"
+        // (if users have weekly ceremonies, it's quite convinient)
+        $now = $now->add(new \DateInterval('PT3H'));
 
+        $twoDaysAgo = \DateTime::createFromFormat('U', strtotime('-2 days'));
         $experimentForWhichWeNeedToSendCheckInReminders = [];
 
         foreach ($this->experimentRepository->findAll() as $experiment) {
@@ -78,10 +81,6 @@ class SendEmailsCommand extends Command
             if ($nextReminder <= $experiment->period->start) {
                 continue;
             }
-
-            // Remove 2 hours so that it can be "prepared"
-            // (if users have weekly ceremonies, it's quite convinient)
-            $nextReminder = $nextReminder->sub(new \DateInterval('PT2H'));
 
             if ($this->sentEmailRecordRepository->hasSent($experiment, $nextReminder, 'check-in-reminder')) {
                 continue;
