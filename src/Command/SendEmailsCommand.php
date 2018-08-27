@@ -44,9 +44,11 @@ class SendEmailsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $now = new \DateTime();
+
         // Add 3 hours so that it can be "prepared"
         // (if users have weekly ceremonies, it's quite convinient)
-        $now = $now->add(new \DateInterval('PT3H'));
+        $notificationInternalCursor = new \DateInterval('PT3H');
+        $notificationTimeReference = $now->add($notificationInternalCursor);
 
         $twoDaysAgo = \DateTime::createFromFormat('U', strtotime('-2 days'));
         $experimentForWhichWeNeedToSendCheckInReminders = [];
@@ -74,7 +76,7 @@ class SendEmailsCommand extends Command
             $nextReminder = (new When())
                 ->startDate($experiment->period->start)
                 ->freq('weekly')
-                ->getPrevOccurrence($now);
+                ->getPrevOccurrence($notificationTimeReference);
 
             // If the reminder is before or equal the start date, we don't send it,
             // it's the first one.
@@ -82,7 +84,8 @@ class SendEmailsCommand extends Command
                 continue;
             }
 
-            if ($this->sentEmailRecordRepository->hasSent($experiment, $nextReminder, 'check-in-reminder')) {
+            $lastNotificationTimeReference = (clone $nextReminder)->sub($notificationInternalCursor);
+            if ($this->sentEmailRecordRepository->hasSent($experiment, $lastNotificationTimeReference, 'check-in-reminder')) {
                 continue;
             }
 

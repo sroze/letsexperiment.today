@@ -19,6 +19,7 @@ class FeatureContext implements Context
     private $mailer;
     private $kernel;
     private $tokenGenerator;
+    private $sentEmailRecordRepository;
 
     public function __construct(
         KernelInterface $kernel,
@@ -41,6 +42,7 @@ class FeatureContext implements Context
         ));
         $this->kernel = $kernel;
         $this->tokenGenerator = $tokenGenerator;
+        $this->sentEmailRecordRepository = $sentEmailRecordRepository;
     }
 
     /**
@@ -87,6 +89,19 @@ class FeatureContext implements Context
     public function theExperimentHasTheCollaborator($uuid, $email)
     {
         $this->experimentRepository->find($uuid)->collaborators->add(new \App\Entity\Collaborator($email));
+    }
+
+    /**
+     * @Given a check-in reminder for the experiment :uuid has been sent to :email :time ago
+     */
+    public function aCheckInReminderForTheExperimentHasBeenSentToAgo($uuid, $email, $time)
+    {
+        $this->sentEmailRecordRepository->record(new \App\Entity\SentEmailRecord(
+            $this->experimentRepository->find($uuid),
+            'check-in-reminder',
+            $email,
+            DateTime::createFromFormat('U', strtotime($time))
+        ));
     }
 
     /**

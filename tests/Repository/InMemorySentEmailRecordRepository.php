@@ -13,7 +13,7 @@ class InMemorySentEmailRecordRepository implements SentEmailRecordRepository
     public function hasSent(Experiment $experiment, \DateTime $since, string $type): bool
     {
         return count(array_filter($this->sent, function(SentEmailRecord $reminder) use ($experiment, $since, $type) {
-            return $reminder->experiment->uuid === $experiment->uuid && $reminder->when > $since && $reminder->emailType == $type;
+            return $reminder->experiment->uuid === $experiment->uuid && $reminder->sentAt > $since && $reminder->emailType == $type;
         })) > 0;
     }
 
