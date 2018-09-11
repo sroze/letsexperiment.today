@@ -1,7 +1,17 @@
+{% macro experiment_text_class(experiment) %}
+{% spaceless %}
+    {% if experiment.hasEnded() %}text-muted
+    {% elseif experiment.isStarted() %}text-success
+    {% else %}text-warning
+    {% endif %}
+{% endspaceless %}
+{% endmacro %}
+{% import _self as macros %}
+
 <div class="card experiment-card">
     <div class="card-body">
         <h5 class="card-title">{{ experiment.name }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">
+        <h6 class="card-subtitle mb-2 {{ macros.experiment_text_class(experiment) }}">
             {% if experiment.hasEnded() %}
                 Ended
             {% elseif experiment.isStarted() %}
