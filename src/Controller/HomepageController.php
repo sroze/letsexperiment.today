@@ -22,7 +22,7 @@ class HomepageController extends Controller
     public function index(UserInterface $user = null)
     {
         /** @var ArrayCollection|Experiment $experiments */
-        $experiments = $user !== null ? $user->getCollaborator()->experiments : [];
+        $experiments = $user !== null ? $user->getCollaborator()->experiments : new ArrayCollection();
 
         return [
             'endedExperiments' => $experiments->filter(function(Experiment $experiment) {
