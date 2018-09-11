@@ -20,7 +20,7 @@ class ExpectedOutcome
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Experiment", inversedBy="expectedOutcomes")
-     * @ORM\JoinColumn(name="experiment_uuid", referencedColumnName="uuid")
+     * @ORM\JoinColumn(name="experiment_uuid", referencedColumnName="uuid", onDelete="CASCADE")
      *
      * @var Experiment
      */

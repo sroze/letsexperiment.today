@@ -20,7 +20,7 @@ class CheckedOutcome
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\CheckIn", inversedBy="checkedOutcomes")
-     * @ORM\JoinColumn(name="check_in_uuid", referencedColumnName="uuid")
+     * @ORM\JoinColumn(name="check_in_uuid", referencedColumnName="uuid", onDelete="CASCADE")
      *
      * @var Experiment
      */
@@ -28,7 +28,7 @@ class CheckedOutcome
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ExpectedOutcome")
-     * @ORM\JoinColumn(name="expected_outcome_uuid", referencedColumnName="uuid")
+     * @ORM\JoinColumn(name="expected_outcome_uuid", referencedColumnName="uuid", onDelete="CASCADE")
      *
      * @var Experiment
      */

@@ -20,7 +20,7 @@ class SentEmailRecord
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Experiment")
-     * @ORM\JoinColumn(name="experiment_uuid", referencedColumnName="uuid")
+     * @ORM\JoinColumn(name="experiment_uuid", referencedColumnName="uuid", onDelete="CASCADE")
      *
      * @var Experiment
      */

@@ -21,7 +21,7 @@ class CheckIn
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Experiment", inversedBy="checkIns")
-     * @ORM\JoinColumn(name="experiment_uuid", referencedColumnName="uuid")
+     * @ORM\JoinColumn(name="experiment_uuid", referencedColumnName="uuid", onDelete="CASCADE")
      *
      * @var Experiment
      */

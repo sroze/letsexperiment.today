@@ -31,7 +31,7 @@ class Experiment
      * @ORM\ManyToMany(targetEntity="App\Entity\Collaborator", inversedBy="experiments")
      * @ORM\JoinTable(
      *     name="experiments_collaborators",
-     *     joinColumns={@ORM\JoinColumn(name="experiment_uuid", referencedColumnName="uuid")},
+     *     joinColumns={@ORM\JoinColumn(name="experiment_uuid", referencedColumnName="uuid", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="collaborator_uuid", referencedColumnName="uuid")}
      * )
      *
