@@ -72,7 +72,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title text-success"><i class="fa fa-rocket"></i> It's on-going</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">End {{ experiment.period.end | time_diff }}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Ends {{ experiment.period.end | time_diff }}</h6>
 
                     <p class="card-text"><strong>Started:</strong><br>{{ experiment.period.start | date }}</p>
                     <p class="card-text"><strong>Will end:</strong><br>{{ experiment.period.end | date }}</p>
