@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Experiment;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,10 +21,19 @@ class HomepageController extends Controller
      */
     public function index(UserInterface $user = null)
     {
+        /** @var ArrayCollection|Experiment $experiments */
         $experiments = $user !== null ? $user->getCollaborator()->experiments : [];
 
         return [
-            'experiments' => $experiments,
+            'endedExperiments' => $experiments->filter(function(Experiment $experiment) {
+                return $experiment->hasEnded();
+            }),
+            'ongoingExperiments' => $experiments->filter(function(Experiment $experiment) {
+                return $experiment->isStarted() && !$experiment->hasEnded();
+            }),
+            'pendingExperiments' => $experiments->filter(function(Experiment $experiment) {
+                return !$experiment->isStarted();
+            })
         ];
     }
 

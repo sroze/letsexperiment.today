@@ -207,6 +207,32 @@ class ExperimentController extends Controller
         return $this->redirectToExperiment($experiment);
     }
 
+    /**
+     * @Route("/end", name="experiment_end", methods={"POST"})
+     * @Security("is_granted('EDIT', experiment)")
+     */
+    public function end(Experiment $experiment)
+    {
+        $experiment->period->end = new \DateTime();
+
+        $this->entityManager->persist($experiment);
+        $this->entityManager->flush();
+
+        return $this->redirectToExperiment($experiment);
+    }
+
+    /**
+     * @Route("/delete", name="experiment_delete", methods={"POST"})
+     * @Security("is_granted('EDIT', experiment)")
+     */
+    public function delete(Experiment $experiment)
+    {
+        $this->entityManager->remove($experiment);
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('home');
+    }
+
     private function redirectToExperiment(Experiment $experiment): RedirectResponse
     {
         return $this->redirectToRoute('experiment', [

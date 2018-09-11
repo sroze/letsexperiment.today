@@ -119,6 +119,20 @@
     <div class="col-md-6">
         {% include "experiment/partials/collaborators_card.html.twig" %}
     </div>
+    {% if experiment.isStarted() and is_granted('EDIT', experiment) %}
+    <div class="col-md-6">
+        {% if not experiment.hasEnded() %}
+        <form method="post" action="{{ path('experiment_end', {'id': experiment.uuid}) }}" class="form-end-experiment" onsubmit="return confirm('Do you really want to end the experiment?');">
+            <p>If your experiment is not conclusive before its planned end date you can...</p>
+            <button type="submit" class="btn btn-warning">Prematurely end experiment</button>
+        </form>
+        {% else %}
+        <form method="post" action="{{ path('experiment_delete', {'id': experiment.uuid}) }}" class="form-delete-experiment" onsubmit="return confirm('Do you really want to delete the experiment?');">
+            <button type="submit" class="btn btn-danger">Delete experiment</button>
+        </form>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 {% else %}
     {% if is_granted('EDIT', experiment) %}

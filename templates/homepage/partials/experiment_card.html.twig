@@ -1,0 +1,25 @@
+<div class="card experiment-card">
+    <div class="card-body">
+        <h5 class="card-title">{{ experiment.name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+            {% if experiment.hasEnded() %}
+                Ended
+            {% elseif experiment.isStarted() %}
+                On-going.
+            {% else %}
+                Not started.
+            {% endif %}
+        </h6>
+    </div>
+    <ul class="list-group list-group-flush experiment-outcomes">
+        {% for expectedOutcome in experiment.expectedOutcomes %}
+            <li class="list-group-item">
+                <span class="experiment-name">{{ expectedOutcome.name }}</span>
+                <span class="experiment-transition">{{ expectedOutcome.currentValue }} ➟ {{ expectedOutcome.expectedValue }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="card-footer">
+        <a href="{{ path('experiment', {'id': experiment.uuid}) }}" class="card-link">Open experiment</a>
+    </div>
+</div>

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -30,19 +31,21 @@ class Collaborator
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Experiment", mappedBy="collaborators")
      *
-     * @var Experiment[]
+     * @var ArrayCollection|Experiment[]
      */
     public $experiments;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\CheckIn", mappedBy="collaborator")
      *
-     * @var CheckIn[]
+     * @var ArrayCollection|CheckIn[]
      */
     public $checkIns;
 
     public function __construct(string $email)
     {
         $this->email = $email;
+        $this->experiments = new ArrayCollection();
+        $this->checkIns = new ArrayCollection();
     }
 }

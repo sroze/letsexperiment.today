@@ -16,37 +16,34 @@
         </form>
     </div>
 </article>
-{% if experiments | length > 0 %}
-<h3>Your experiments</h3>
-<div class="experiments d-flex flex-wrap">
-{% for experiment in experiments %}
-    <div class="card experiment-card">
-        <div class="card-body">
-            <h5 class="card-title">{{ experiment.name }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">
-                {% if experiment.isStarted() %}
-                    On-going.
-                {% else %}
-                    Not started.
-                {% endif %}
-            </h6>
-        </div>
-        <ul class="list-group list-group-flush experiment-outcomes">
-            {% for expectedOutcome in experiment.expectedOutcomes %}
-            <li class="list-group-item">
-                <span class="experiment-name">{{ expectedOutcome.name }}</span>
-                <span class="experiment-transition">{{ expectedOutcome.currentValue }} ➟ {{ expectedOutcome.expectedValue }}</span>
-            </li>
-            {% endfor %}
-        </ul>
-        <div class="card-footer">
-            <a href="{{ path('experiment', {'id': experiment.uuid}) }}" class="card-link">Open experiment</a>
-        </div>
+{% if pendingExperiments | length > 0 %}
+    <h3>Your pending experiments</h3>
+    <div class="experiments d-flex flex-wrap">
+    {% for experiment in pendingExperiments %}
+        {% include "homepage/partials/experiment_card.html.twig" with {'experiment': experiment} only %}
+    {% endfor %}
     </div>
-{% endfor %}
-</div>
-<hr/>
 {% endif %}
+
+{% if ongoingExperiments | length > 0 %}
+    <h3>Your on-going experiments</h3>
+    <div class="experiments d-flex flex-wrap">
+        {% for experiment in ongoingExperiments %}
+            {% include "homepage/partials/experiment_card.html.twig" with {'experiment': experiment} only %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+{% if endedExperiments | length > 0 %}
+    <h3>Your ended experiments</h3>
+    <div class="experiments d-flex flex-wrap">
+        {% for experiment in endedExperiments %}
+            {% include "homepage/partials/experiment_card.html.twig" with {'experiment': experiment} only %}
+        {% endfor %}
+    </div>
+{% endif %}
+<hr/>
 <article class="row">
     <div class="col-md-4">
         <h4><i class="fa fa-key"></i> Measurable results</h4>
