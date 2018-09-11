@@ -104,6 +104,9 @@
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
+    "jean85/pretty-package-versions": {
+        "version": "1.2"
+    },
     "lcobucci/jwt": {
         "version": "3.2.4"
     },
@@ -180,6 +183,18 @@
             "branch": "master",
             "version": "5.2",
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        }
+    },
+    "sentry/sentry": {
+        "version": "1.9.2"
+    },
+    "sentry/sentry-symfony": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "fa1a2dfc020798cd7076b5419596e72dca07047a"
         }
     },
     "swiftmailer/swiftmailer": {
