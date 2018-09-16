@@ -53,4 +53,9 @@ class ExpectedOutcome
      * @var CheckedOutcome[]|Collection
      */
     public $checkedOutcomes;
+
+    public function isNumeric(): bool
+    {
+        return is_numeric($this->currentValue) && is_numeric($this->expectedValue);
+    }
 }
