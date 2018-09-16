@@ -9,6 +9,10 @@
 require('bootstrap/dist/css/bootstrap.css');
 require('../css/app.scss');
 const $ = require('jquery');
+const Highcharts = require('highcharts');
+
+window.$ = $;
+window.Highcharts = Highcharts;
 
 $(function() {
   $('form[name="new-outcome"]').each(function(index, form) {
@@ -22,5 +26,47 @@ $(function() {
         return false;
       }
     })
+  });
+
+  $('.outcome-chart').each(function(index, chart) {
+    const { name, points } = $(chart).data('chart');
+    console.log(name);
+    Highcharts.chart(chart, {
+        title: '',
+        chart: {
+            type: 'line',
+        },
+        credits: {
+            enabled: false
+        },
+        xAxis: {
+            type: 'datetime',
+            labels: {
+                format: '{value:%m-%d}'
+            }
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+        },
+        series: [{
+            name: name,
+            showInLegend: false,
+            data: points.map((point) => ([
+                Date.parse(point[0]),
+                point[1]
+            ])),
+            zoneAxis: 'x',
+            zones: [
+                {
+                    value: Date.parse(points[points.length - 2][0]),
+                },
+                {
+                    dashStyle: 'dot'
+                }
+            ]
+        }],
+    });
   });
 });
