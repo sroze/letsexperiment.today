@@ -40,4 +40,9 @@ class CheckedOutcome
      * @var string
      */
     public $currentValue;
+
+    public function isNumeric(): bool
+    {
+        return is_numeric($this->currentValue);
+    }
 }

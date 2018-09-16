@@ -56,6 +56,12 @@ class ExpectedOutcome
 
     public function isNumeric(): bool
     {
-        return is_numeric($this->currentValue) && is_numeric($this->expectedValue);
+        $isNumeric = is_numeric($this->currentValue) && is_numeric($this->expectedValue);
+
+        foreach ($this->checkedOutcomes as $checkedOutcome) {
+            $isNumeric = $isNumeric && $checkedOutcome->isNumeric();
+        }
+
+        return $isNumeric;
     }
 }
