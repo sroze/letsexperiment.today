@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,4 +47,10 @@ class ExpectedOutcome
      * @var string
      */
     public $expectedValue;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CheckedOutcome", mappedBy="expectedOutcome")
+     * @var CheckedOutcome[]|Collection
+     */
+    public $checkedOutcomes;
 }

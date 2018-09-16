@@ -22,12 +22,12 @@ class CheckedOutcome
      * @ORM\ManyToOne(targetEntity="App\Entity\CheckIn", inversedBy="checkedOutcomes")
      * @ORM\JoinColumn(name="check_in_uuid", referencedColumnName="uuid", onDelete="CASCADE")
      *
-     * @var Experiment
+     * @var CheckIn
      */
     public $checkIn;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ExpectedOutcome")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ExpectedOutcome", inversedBy="checkedOutcomes")
      * @ORM\JoinColumn(name="expected_outcome_uuid", referencedColumnName="uuid", onDelete="CASCADE")
      *
      * @var Experiment
