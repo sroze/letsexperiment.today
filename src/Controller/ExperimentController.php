@@ -62,7 +62,10 @@ class ExperimentController extends Controller
             $this->entityManager->flush();
         }
 
-        $expectedOutcomesCharts = $this->chartFactory->createExpectedOutcomeChartsForExperiment($experiment);
+        $expectedOutcomesCharts = [];
+        foreach ($experiment->expectedOutcomes as $expectedOutcome) {
+            $expectedOutcomesCharts[$expectedOutcome->uuid] = $this->chartFactory->createExpectedOutcomeChart($expectedOutcome);
+        }
 
         return [
             'experiment' => $experiment,

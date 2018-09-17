@@ -11,9 +11,6 @@ require('../css/app.scss');
 const $ = require('jquery');
 const Highcharts = require('highcharts');
 
-window.$ = $;
-window.Highcharts = Highcharts;
-
 $(function() {
   $('form[name="new-outcome"]').each(function(index, form) {
     const formFields = $('.form-fields', form);
@@ -30,7 +27,6 @@ $(function() {
 
   $('.outcome-chart').each(function(index, chart) {
     const { name, points } = $(chart).data('chart');
-    console.log(name);
     Highcharts.chart(chart, {
         title: '',
         chart: {
@@ -53,7 +49,7 @@ $(function() {
         series: [{
             name: name,
             showInLegend: false,
-            data: points.map((point) => ([
+            data: points.map(point => ([
                 Date.parse(point[0]),
                 point[1]
             ])),
