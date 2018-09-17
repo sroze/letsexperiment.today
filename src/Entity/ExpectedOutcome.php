@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,4 +47,22 @@ class ExpectedOutcome
      * @var string
      */
     public $expectedValue;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CheckedOutcome", mappedBy="expectedOutcome")
+     * @var CheckedOutcome[]|Collection
+     */
+    public $checkedOutcomes;
+
+    public function isNumeric(): bool
+    {
+        return array_reduce(
+            $this->checkedOutcomes->toArray(),
+            function (bool $isNumeric, CheckedOutcome $checkedOutcome): bool
+            {
+                return $isNumeric && $checkedOutcome->isNumeric();
+            },
+            is_numeric($this->currentValue) && is_numeric($this->expectedValue)
+        );
+    }
 }

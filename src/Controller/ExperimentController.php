@@ -11,6 +11,7 @@ use App\Entity\ExperimentPeriod;
 use App\Events\AddedCollaborator;
 use App\Events\Events;
 use App\Events\ExperimentStarted;
+use App\Factory\ChartFactory;
 use App\SeamlessSecurity\Bridge\CollaboratorAsUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -31,11 +32,16 @@ class ExperimentController extends Controller
 {
     private $entityManager;
     private $eventDispatcher;
+    private $chartFactory;
 
-    public function __construct(EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $eventDispatcher,
+        ChartFactory $chartFactory
+    ) {
         $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
+        $this->chartFactory = $chartFactory;
     }
 
     /**
@@ -56,8 +62,14 @@ class ExperimentController extends Controller
             $this->entityManager->flush();
         }
 
+        $expectedOutcomesCharts = [];
+        foreach ($experiment->expectedOutcomes as $expectedOutcome) {
+            $expectedOutcomesCharts[$expectedOutcome->uuid] = $this->chartFactory->createExpectedOutcomeChart($expectedOutcome);
+        }
+
         return [
             'experiment' => $experiment,
+            'expectedOutcomesCharts' => $expectedOutcomesCharts
         ];
     }
 

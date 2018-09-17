@@ -59,7 +59,7 @@ body {
     margin-bottom: 20px;
 
     ul.experiment-outcomes {
-        li {
+        .outcome-summary {
             display: flex;
             flex-direction: row;
 
@@ -76,6 +76,9 @@ body {
                     padding-bottom: 0.05rem;
                 }
             }
+        }
+        .outcome-chart {
+            height: 200px;
         }
     }
 }

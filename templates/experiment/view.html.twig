@@ -14,18 +14,23 @@
             <ul class="list-group list-group-flush experiment-outcomes">
                 {% for expectedOutcome in experiment.expectedOutcomes %}
                     <li class="list-group-item">
-                        <span class="experiment-name">{{ expectedOutcome.name }}</span>
-                        <span class="experiment-transition">
+                        <div class="outcome-summary">
+                            <span class="experiment-name">{{ expectedOutcome.name }}</span>
+                            <span class="experiment-transition">
                             {{ expectedOutcome.currentValue }} ➟ {{ expectedOutcome.expectedValue }}
                             {% if lastCheckIn is not null %}
-                            <br>
-                            <span class="last-value">Last value: {{ lastCheckIn.checkedOutcomeForExpectedOutcome(expectedOutcome).currentValue }}</span>
+                                <br>
+                                <span class="last-value">Last value: {{ lastCheckIn.checkedOutcomeForExpectedOutcome(expectedOutcome).currentValue }}</span>
                             {% endif %}
-                        </span>
-                        {% if not experiment.isStarted() and is_granted('EDIT', experiment) %}
-                        <form class="removal-form" action="{{ path('experiment_remove_outcome', {'id': experiment.uuid, 'outcomeUuid': expectedOutcome.uuid}) }}" method="post" onsubmit="return confirm('Are you sure to remove this expected outcome?');">
-                            <button type="submit" class="btn btn-danger btn-sm">X</button>
-                        </form>
+                            </span>
+                            {% if not experiment.isStarted() and is_granted('EDIT', experiment) %}
+                            <form class="removal-form" action="{{ path('experiment_remove_outcome', {'id': experiment.uuid, 'outcomeUuid': expectedOutcome.uuid}) }}" method="post" onsubmit="return confirm('Are you sure to remove this expected outcome?');">
+                                <button type="submit" class="btn btn-danger btn-sm">X</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                        {% if expectedOutcome.isNumeric() %}
+                        <div class="outcome-chart" data-chart="{{ expectedOutcomesCharts[expectedOutcome.uuid] | json_encode() }}"></div>
                         {% endif %}
                     </li>
                 {% endfor %}
