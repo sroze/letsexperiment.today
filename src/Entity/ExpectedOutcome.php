@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -53,6 +54,11 @@ class ExpectedOutcome
      * @var CheckedOutcome[]|Collection
      */
     public $checkedOutcomes;
+
+    public function __construct()
+    {
+        $this->checkedOutcomes = new ArrayCollection();
+    }
 
     public function isNumeric(): bool
     {

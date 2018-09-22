@@ -88,7 +88,7 @@ class Experiment
     {
         $lastCriteria = Criteria::create()
             ->setFirstResult(1)
-            ->orderBy(array('date' => Criteria::DESC));
+            ->orderBy(array('date' => Criteria::ASC));
 
         $lastCheckIn = $this->checkIns->matching($lastCriteria)->first();
 

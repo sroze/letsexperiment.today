@@ -5,6 +5,7 @@ namespace App\Factory;
 
 
 use App\Entity\ExpectedOutcome;
+use Doctrine\Common\Collections\Criteria;
 
 class ChartFactory
 {
@@ -19,7 +20,11 @@ class ChartFactory
         ];
 
         // Then add all the checked outcomes
-        foreach($expectedOutcome->checkedOutcomes->toArray() as $checkedOutcome) {
+        $checkedOutcomes = $expectedOutcome->checkedOutcomes->matching(
+            Criteria::create()->orderBy(array('checkIn' => Criteria::ASC))
+        );
+
+        foreach($checkedOutcomes->toArray() as $checkedOutcome) {
             $points[] = [
                 $checkedOutcome->checkIn->date->format('c'),
                 floatval($checkedOutcome->currentValue)
