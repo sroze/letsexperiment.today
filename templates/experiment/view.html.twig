@@ -29,7 +29,7 @@
                             </form>
                             {% endif %}
                         </div>
-                        {% if expectedOutcome.isNumeric() %}
+                        {% if expectedOutcome.isNumeric() and experiment.isStarted() %}
                         <div class="outcome-chart" data-chart="{{ expectedOutcomesCharts[expectedOutcome.uuid] | json_encode() }}"></div>
                         {% endif %}
                     </li>

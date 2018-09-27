@@ -63,8 +63,11 @@ class ExperimentController extends Controller
         }
 
         $expectedOutcomesCharts = [];
-        foreach ($experiment->expectedOutcomes as $expectedOutcome) {
-            $expectedOutcomesCharts[$expectedOutcome->uuid] = $this->chartFactory->createExpectedOutcomeChart($expectedOutcome);
+
+        if ($experiment->isStarted()) {
+            foreach ($experiment->expectedOutcomes as $expectedOutcome) {
+                $expectedOutcomesCharts[$expectedOutcome->uuid] = $this->chartFactory->createExpectedOutcomeChart($expectedOutcome);
+            }
         }
 
         return [
