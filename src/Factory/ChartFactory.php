@@ -5,7 +5,6 @@ namespace App\Factory;
 
 
 use App\Entity\ExpectedOutcome;
-use Doctrine\Common\Collections\Criteria;
 
 class ChartFactory
 {

@@ -66,7 +66,9 @@ class ExperimentController extends Controller
 
         if ($experiment->isStarted()) {
             foreach ($experiment->expectedOutcomes as $expectedOutcome) {
-                $expectedOutcomesCharts[$expectedOutcome->uuid] = $this->chartFactory->createExpectedOutcomeChart($expectedOutcome);
+                if ($expectedOutcome->isNumeric()) {
+                    $expectedOutcomesCharts[$expectedOutcome->uuid] = $this->chartFactory->createExpectedOutcomeChart($expectedOutcome);
+                }
             }
         }
 
