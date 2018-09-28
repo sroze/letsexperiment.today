@@ -19,11 +19,7 @@ class ChartFactory
         ];
 
         // Then add all the checked outcomes
-        $checkedOutcomes = $expectedOutcome->checkedOutcomes->matching(
-            Criteria::create()->orderBy(array('checkIn' => Criteria::ASC))
-        );
-
-        foreach($checkedOutcomes->toArray() as $checkedOutcome) {
+        foreach($expectedOutcome->checkedOutcomes->toArray() as $checkedOutcome) {
             $points[] = [
                 $checkedOutcome->checkIn->date->format('c'),
                 floatval($checkedOutcome->currentValue)
@@ -35,6 +31,14 @@ class ChartFactory
             $expectedOutcome->experiment->period->end->format('c'),
             floatval($expectedOutcome->expectedValue)
         ];
+
+        usort(
+            $points,
+            function(array $point1, array $point2): int
+            {
+                return strcmp($point1[0], $point2[0]);
+            }
+        );
 
         return [
             'name' => $expectedOutcome->name,
