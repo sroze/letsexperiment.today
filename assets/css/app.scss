@@ -188,7 +188,33 @@ q:after {
     margin: 50px auto;
 }
 
+.features {
+    > div {
+        .feature-name {
+            background: #efef;
+            padding: 4px 10px;
+            margin-left: 10px;
+        }
+
+        &:nth-child(2) {
+            .feature-name {
+                background: #C7F0EC;
+            }
+        }
+        &:nth-child(3) {
+            .feature-name {
+                background: #FFE6D3;
+            }
+        }
+    }
+
+    img {
+        width: 100%;
+    }
+}
+
 footer {
+    margin-top: 20px;
     font-size: 0.8em;
 }
 

@@ -44,18 +44,21 @@
     </div>
 {% endif %}
 <hr/>
-<article class="row">
+<article class="row features">
     <div class="col-md-4">
-        <h4><i class="fa fa-key"></i> Measurable results</h4>
+        <h4><i class="fa fa-key"></i> <span class="feature-name">Measurable results</span></h4>
         <p>When creating an experiment, you set a number of measurable <em>expected</em> outcomes. These will help you to conclude whether the experiment is successful or not.</p>
+        <img src="{{ asset('images/summary.png') }}" />
     </div>
     <div class="col-md-4">
-        <h4><i class="far fa-clock"></i> Track them over-time</h4>
+        <h4><i class="far fa-clock"></i> <span class="feature-name">Track them over-time</span></h4>
         <p>Every week, we will send you an overview of your on-going experiments and invite you to <em>check-in</em> to update the measurable expected outcomes.</p>
+        <img src="{{ asset('images/over-time-2nd.png') }}" style="width: 100%;" />
     </div>
     <div class="col-md-4">
-        <h4><i class="fa fa-users"></i> Collaborate</h4>
+        <h4><i class="fa fa-users"></i> <span class="feature-name">Collaborate</span></h4>
         <p>Invite as many collaborators as you'd like to collaborate on your experiments. They will also be notified when something happens to the experimentation.</p>
+        <img src="{{ asset('images/collaborators.png') }}" style="width: 100%;" />
     </div>
 </article>
 {% endblock %}
