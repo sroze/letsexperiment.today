@@ -87,8 +87,8 @@ class Experiment
     public function lastCheckIn() : ?CheckIn
     {
         $lastCriteria = Criteria::create()
-            ->setFirstResult(1)
-            ->orderBy(array('date' => Criteria::ASC));
+            ->setMaxResults(1)
+            ->orderBy(array('date' => Criteria::DESC));
 
         $lastCheckIn = $this->checkIns->matching($lastCriteria)->first();
 
